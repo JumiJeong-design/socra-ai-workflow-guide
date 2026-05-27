@@ -24,6 +24,29 @@
   --sidebar-w: 260px;
 }
 
+/* ─── Dark Theme ─── */
+[data-theme="dark"] {
+  --bg: #0C0E1A;
+  --bg-card: #141728;
+  --bg-code: #1B1E30;
+  --bg-code-block: #171A2B;
+  --border: #262A42;
+  --border-light: #1D2038;
+  --text-primary: #DFE2F0;
+  --text-secondary: #8B93B4;
+  --text-muted: #4D5470;
+  --accent: #7A6FFF;
+  --accent-light: #9A92FF;
+  --accent-dim: rgba(122, 111, 255, 0.15);
+  --accent-dim2: rgba(122, 111, 255, 0.08);
+  --green: #27C760;
+  --green-dim: rgba(39, 199, 96, 0.13);
+  --blue: #4F60FF;
+  --blue-dim: rgba(79, 96, 255, 0.13);
+  --orange: #E8721A;
+  --orange-dim: rgba(232, 114, 26, 0.13);
+}
+
 /* ─── Reset ─── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
@@ -35,6 +58,7 @@ body {
   font-size: 16px;
   line-height: 1.75;
   min-height: 100vh;
+  transition: background-color 0.2s ease, color 0.15s ease;
 }
 
 /* ─── Layout ─── */
@@ -1264,4 +1288,92 @@ ol.styled li::before {
   .home-cards,
   .home-cards.col-3 { grid-template-columns: 1fr; }
   .home-steps { grid-template-columns: 1fr 1fr; }
+}
+
+/* ─── Theme Toggle ─── */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+
+.theme-toggle:hover {
+  color: var(--text-primary);
+  border-color: var(--accent);
+  background: var(--accent-dim);
+}
+
+/* ─── Extension / Condition Tags ─── */
+.section-condition {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+  padding: 10px 14px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.condition-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  background: var(--accent-dim);
+  border: 1px solid rgba(102, 79, 255, 0.2);
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+/* ─── Product Type Diagnosis ─── */
+.diagnosis-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 16px 0;
+}
+
+.diagnosis-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+}
+
+.diagnosis-q {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.diagnosis-yes {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.diagnosis-yes strong {
+  color: var(--accent);
+}
+
+@media (max-width: 640px) {
+  .diagnosis-grid { grid-template-columns: 1fr; }
 }

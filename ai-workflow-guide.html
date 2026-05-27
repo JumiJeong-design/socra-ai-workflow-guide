@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://cdn.jsdelivr.net" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
   <link rel="stylesheet" href="ai-workflow-guide.css" />
+  <script>(function(){var t=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);})();</script>
 </head>
 <body>
 
@@ -1773,6 +1774,354 @@ UX 기준:
         <div class="callout-icon">💡</div>
         <p>일정이 단축되는 것은 <strong>AI 활용이 팀에 완전히 정착된 이후</strong>입니다. 처음 2~4주는 학습 곡선을 감안해 기존 일정을 유지하고, 반복 업무에서 실제로 단축되는 경험이 쌓인 다음 일정 기준을 조정하세요.</p>
       </div>
+    </section>
+
+    <hr class="divider" />
+
+    <!-- 제품 유형 자가진단 -->
+    <section class="section" id="product-type">
+      <div class="section-header">
+        <div class="section-num">↗</div>
+        <h2>제품 유형 자가진단</h2>
+      </div>
+      <p>아래 4가지 질문에 "예"라고 답하는 항목에 해당하는 확장 섹션을 읽으세요. 해당 없는 섹션은 건너뛰어도 됩니다.</p>
+
+      <div class="diagnosis-grid">
+        <div class="diagnosis-card">
+          <div class="diagnosis-q">일반 소비자 대상 서비스(B2C)인가?</div>
+          <div class="diagnosis-yes">예 → <strong>브랜드 시각 언어</strong>, <strong>인터랙션/모션 품질</strong> 섹션 적용</div>
+        </div>
+        <div class="diagnosis-card">
+          <div class="diagnosis-q">다국어 지원이 필요한가?</div>
+          <div class="diagnosis-yes">예 → <strong>다국어(i18n) 설계</strong> 섹션 적용</div>
+        </div>
+        <div class="diagnosis-card">
+          <div class="diagnosis-q">다크모드를 지원할 계획인가?</div>
+          <div class="diagnosis-yes">예 → <strong>다크모드 대응</strong> 섹션 적용</div>
+        </div>
+        <div class="diagnosis-card">
+          <div class="diagnosis-q">PC + 모바일 웹 기반 서비스인가?</div>
+          <div class="diagnosis-yes">예 → <strong>반응형 + 기기 QA</strong> 섹션 적용</div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <div class="callout-icon">📌</div>
+        <p>4가지 모두 해당한다면 이 가이드의 확장 섹션 전체가 필요한 B2C 글로벌 웹 서비스입니다. 신규 서비스 구축 시 Core + 확장 전체를 AI 컨텍스트 문서에 포함하세요.</p>
+      </div>
+    </section>
+
+    <!-- 다크모드 대응 -->
+    <section class="section" id="ext-darkmode">
+      <div class="section-header">
+        <div class="section-num">EX</div>
+        <h2>다크모드 대응</h2>
+      </div>
+      <div class="section-condition">
+        <span class="condition-tag">B2C</span>
+        <span class="condition-tag">다크모드 지원 예정</span>
+        <span>해당하지 않으면 건너뛰어도 됩니다.</span>
+      </div>
+
+      <h3>시맨틱 토큰 레이어</h3>
+      <p>색상값을 직접 쓰는 대신 목적 기반 토큰으로 추상화합니다. 테마가 바뀌어도 컴포넌트 코드는 그대로 유지됩니다.</p>
+      <div class="compare">
+        <div class="compare-box bad">
+          <div class="compare-label">하지 말 것</div>
+          <pre><code>background: #FFFFFF;
+color: #090C32;
+border: 1px solid #E0E2ED;</code></pre>
+        </div>
+        <div class="compare-box good">
+          <div class="compare-label">이렇게</div>
+          <pre><code>background: var(--bg-card);
+color: var(--text-primary);
+border: 1px solid var(--border);</code></pre>
+        </div>
+      </div>
+
+      <h3>CSS 토큰 구조</h3>
+      <div class="code-label">tokens.css</div>
+      <pre><code>:root {
+  /* 배경 */
+  --bg: #F7F8FC;
+  --bg-card: #FFFFFF;
+  --bg-code: #ECEDF5;
+
+  /* 테두리 */
+  --border: #E0E2ED;
+  --border-light: #ECEEF5;
+
+  /* 텍스트 */
+  --text-primary: #090C32;
+  --text-secondary: #464A65;
+  --text-muted: #9398AC;
+
+  /* 브랜드 */
+  --accent: #664FFF;
+  --accent-dim: rgba(102, 79, 255, 0.08);
+}
+
+[data-theme="dark"] {
+  --bg: #0C0E1A;
+  --bg-card: #141728;
+  --bg-code: #1B1E30;
+
+  --border: #262A42;
+  --border-light: #1D2038;
+
+  --text-primary: #DFE2F0;
+  --text-secondary: #8B93B4;
+  --text-muted: #4D5470;
+
+  --accent: #7A6FFF;
+  --accent-dim: rgba(122, 111, 255, 0.15);
+}</code></pre>
+
+      <h3>전환 방식</h3>
+      <ul class="styled">
+        <li><strong>기본값</strong> — <code>prefers-color-scheme: dark</code> 시스템 설정 따름</li>
+        <li><strong>수동 전환</strong> — 사용자가 토글 시 <code>localStorage</code>에 저장, 이후 방문 시 유지</li>
+        <li><strong>FOUC 방지</strong> — <code>&lt;head&gt;</code> 안 인라인 스크립트로 렌더 전 테마 즉시 적용</li>
+      </ul>
+      <div class="code-label">HTML &lt;head&gt; — FOUC 방지</div>
+      <pre><code>&lt;script&gt;
+(function(){
+  var t = localStorage.getItem('theme')
+       || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  document.documentElement.setAttribute('data-theme', t);
+})();
+&lt;/script&gt;</code></pre>
+
+      <h3>AI 작업 규칙</h3>
+      <div class="callout">
+        <div class="callout-icon">💡</div>
+        <p><code>docs/design-tokens.md</code>에 토큰 목록과 다크/라이트 값을 정의해두세요. AI에게 "색상은 반드시 토큰 변수명으로 지정, hex 직접 사용 금지"를 <code>CLAUDE.md</code> 규칙에 명시합니다.</p>
+      </div>
+    </section>
+
+    <!-- i18n -->
+    <section class="section" id="ext-i18n">
+      <div class="section-header">
+        <div class="section-num">EX</div>
+        <h2>다국어(i18n) 설계</h2>
+      </div>
+      <div class="section-condition">
+        <span class="condition-tag">다국어 지원 예정</span>
+        <span class="condition-tag">글로벌 서비스</span>
+        <span>해당하지 않으면 건너뛰어도 됩니다.</span>
+      </div>
+
+      <h3>핵심 원칙</h3>
+      <ul class="styled">
+        <li><strong>텍스트 하드코딩 금지</strong> — 모든 노출 문자열은 locale 파일에서 관리. 컴포넌트에 한국어 직접 입력 금지</li>
+        <li><strong>레이아웃은 텍스트 길이에 유연하게</strong> — 영어는 한국어보다 평균 30~40% 길 수 있음. 고정 너비 버튼·레이블 주의</li>
+        <li><strong>폰트는 언어별로</strong> — 한국어 Pretendard, 영어 Inter/system-ui 등 언어별 폰트 스택 분리</li>
+      </ul>
+
+      <h3>파일 구조</h3>
+      <div class="code-label">디렉토리 구조</div>
+      <pre><code>locales/
+  ko.json       # 한국어 (기준 언어)
+  en.json       # 영어
+  ja.json       # 일본어 (추후)
+
+docs/
+  i18n-rules.md # AI에 전달하는 다국어 작업 기준</code></pre>
+
+      <div class="code-label">locales/ko.json</div>
+      <pre><code>{
+  "common": {
+    "save": "저장",
+    "cancel": "취소",
+    "confirm": "확인"
+  },
+  "home": {
+    "title": "AI Workflow 가이드",
+    "cta": "시작하기"
+  }
+}</code></pre>
+
+      <h3>AI 컨텍스트 문서에 포함할 내용</h3>
+      <div class="code-label">docs/i18n-rules.md</div>
+      <pre><code># 다국어 작업 기준
+
+## 절대 규칙
+- 컴포넌트에 한국어/영어 직접 입력 금지
+- 모든 텍스트는 locales/{lang}.json 키 참조
+- 새 문자열 추가 시 ko.json 먼저 작성 후 en.json 동기화
+
+## 레이아웃 주의사항
+- 버튼 너비: min-width 기준, 텍스트 길이 맞춰 유연하게
+- 영어 텍스트: 한국어 대비 최대 1.4배 너비 여유 확보
+- 줄바꿈: 언어별 단어 경계가 다름, overflow 처리 필수</code></pre>
+    </section>
+
+    <!-- 반응형 + 기기 QA -->
+    <section class="section" id="ext-responsive">
+      <div class="section-header">
+        <div class="section-num">EX</div>
+        <h2>반응형 + 기기 QA</h2>
+      </div>
+      <div class="section-condition">
+        <span class="condition-tag">웹 기반</span>
+        <span class="condition-tag">PC + 모바일</span>
+        <span>해당하지 않으면 건너뛰어도 됩니다.</span>
+      </div>
+
+      <h3>브레이크포인트 기준</h3>
+      <div class="table-scroll">
+        <table class="doc-table">
+          <thead>
+            <tr>
+              <th>구간</th>
+              <th>너비</th>
+              <th>대표 기기</th>
+              <th>주요 체크</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Mobile S</td><td>320px</td><td>Galaxy A, 구형 iPhone SE</td><td>텍스트 잘림, 버튼 겹침</td></tr>
+            <tr><td>Mobile M</td><td>375px</td><td>iPhone 14, Pixel 7</td><td>기본 모바일 레이아웃</td></tr>
+            <tr><td>Mobile L</td><td>390–430px</td><td>iPhone 14 Pro Max</td><td>Dynamic Island safe area</td></tr>
+            <tr><td>Tablet</td><td>768px</td><td>iPad mini</td><td>2단 레이아웃 전환 여부</td></tr>
+            <tr><td>Desktop S</td><td>1024px</td><td>iPad Pro, 소형 노트북</td><td>사이드바 고정 여부</td></tr>
+            <tr><td>Desktop L</td><td>1440px+</td><td>일반 모니터</td><td>max-width 제한, 여백 균형</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>기기별 엣지케이스 체크리스트</h3>
+      <ul class="styled">
+        <li><strong>iOS Safe Area</strong> — <code>env(safe-area-inset-*)</code> 적용. Dynamic Island(iPhone 14 Pro+), 홈 인디케이터 영역 침범 여부</li>
+        <li><strong>Android Punch-hole</strong> — 상단 카메라 영역 겹침. <code>viewport-fit=cover</code> + safe-area 처리 동일 적용</li>
+        <li><strong>모바일 주소창 높이</strong> — <code>100vh</code> 대신 <code>100dvh</code> 사용. 주소창 show/hide 시 레이아웃 튀는 현상 방지</li>
+        <li><strong>터치 타겟</strong> — 최소 44×44px. 버튼, 링크, 토글 전부 해당. 손가락 오탭 방지</li>
+        <li><strong>가로 모드</strong> — landscape 전환 시 레이아웃 깨짐 여부 확인</li>
+        <li><strong>텍스트 확대</strong> — OS 텍스트 크기 150% 설정 시 레이아웃 유지 여부</li>
+      </ul>
+
+      <h3>AI 작업 규칙</h3>
+      <div class="callout">
+        <div class="callout-icon">💡</div>
+        <p><code>docs/responsive-rules.md</code>에 브레이크포인트 기준과 엣지케이스 체크리스트를 기록하고, AI에게 "모바일 우선(mobile-first) CSS 작성, safe area 처리 필수"를 규칙으로 명시하세요.</p>
+      </div>
+    </section>
+
+    <!-- 인터랙션 / 모션 -->
+    <section class="section" id="ext-motion">
+      <div class="section-header">
+        <div class="section-num">EX</div>
+        <h2>인터랙션 / 모션 품질</h2>
+      </div>
+      <div class="section-condition">
+        <span class="condition-tag">B2C</span>
+        <span class="condition-tag">인터랙션 품질 중요</span>
+        <span>해당하지 않으면 건너뛰어도 됩니다.</span>
+      </div>
+
+      <h3>모션 원칙 3가지</h3>
+      <div class="grid-3">
+        <div class="grid-card">
+          <div class="grid-card-num">01</div>
+          <div class="grid-card-title">목적이 있는 움직임</div>
+          <div class="grid-card-body">장식이 아닌 상태 변화 전달. 어디서 왔고 어디로 가는지 방향을 알 수 있어야 함</div>
+        </div>
+        <div class="grid-card">
+          <div class="grid-card-num">02</div>
+          <div class="grid-card-title">자연스러운 가속/감속</div>
+          <div class="grid-card-body">linear 지양. ease-out(진입), ease-in-out(전환)으로 물리적 자연감 부여</div>
+        </div>
+        <div class="grid-card">
+          <div class="grid-card-num">03</div>
+          <div class="grid-card-title">간결한 지속시간</div>
+          <div class="grid-card-body">짧고 빠르게. 불필요하게 긴 애니메이션은 사용자를 기다리게 함</div>
+        </div>
+      </div>
+
+      <h3>easing + duration 기준</h3>
+      <div class="table-scroll">
+        <table class="doc-table">
+          <thead><tr><th>용도</th><th>duration</th><th>easing</th></tr></thead>
+          <tbody>
+            <tr><td>마이크로 인터랙션 (hover, focus)</td><td>100–150ms</td><td>ease-out</td></tr>
+            <tr><td>일반 전환 (페이드, 슬라이드)</td><td>200–250ms</td><td>ease-in-out</td></tr>
+            <tr><td>강조 모션 (모달 등장, 알림)</td><td>300–400ms</td><td>cubic-bezier(0.34,1.56,0.64,1) — 살짝 튀는 느낌</td></tr>
+            <tr><td>페이지 전환</td><td>250–350ms</td><td>ease-in-out</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>접근성 — prefers-reduced-motion</h3>
+      <div class="code-label">CSS</div>
+      <pre><code>@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}</code></pre>
+
+      <h3>AI 작업 규칙</h3>
+      <div class="callout">
+        <div class="callout-icon">💡</div>
+        <p><code>docs/motion-spec.md</code>에 easing 변수와 duration 기준을 정의하고 AI에게 전달하세요. "CSS transition은 반드시 motion-spec 기준 값 사용, linear 금지, prefers-reduced-motion 처리 필수"를 규칙으로 명시합니다.</p>
+      </div>
+    </section>
+
+    <!-- 브랜드 시각 언어 -->
+    <section class="section" id="ext-brand">
+      <div class="section-header">
+        <div class="section-num">EX</div>
+        <h2>브랜드 시각 언어</h2>
+      </div>
+      <div class="section-condition">
+        <span class="condition-tag">B2C</span>
+        <span class="condition-tag">브랜드 품질 중요</span>
+        <span>해당하지 않으면 건너뛰어도 됩니다.</span>
+      </div>
+
+      <h3>AI 결과물이 브랜드에서 이탈하는 패턴</h3>
+      <ul class="styled">
+        <li><strong>토큰 무시</strong> — 시맨틱 토큰 대신 임의 hex 사용. 테마 일관성 붕괴</li>
+        <li><strong>폰트 혼용</strong> — 정의된 폰트 스택 외 임의 폰트 추가</li>
+        <li><strong>간격 임의 설정</strong> — 스페이싱 시스템 무시, px 값 자유 지정</li>
+        <li><strong>컴포넌트 재발명</strong> — 이미 있는 컴포넌트를 새로 만들거나 변형</li>
+        <li><strong>모션 과잉</strong> — 브랜드 톤과 맞지 않는 과도한 애니메이션</li>
+      </ul>
+
+      <h3>브랜드 토큰 정의</h3>
+      <p>디자인 시스템의 핵심 가치를 토큰으로 고정합니다. AI가 이 토큰 밖에서 임의 판단하지 못하도록 규칙으로 명시합니다.</p>
+      <div class="code-label">docs/brand-tokens.md</div>
+      <pre><code># 브랜드 토큰 정의
+
+## 컬러
+- Primary: var(--accent) — #664FFF
+- 임의 컬러 추가 금지. 새 컬러 필요 시 디자이너 승인 후 토큰 추가
+
+## 타이포그래피
+- 본문: Pretendard 16px / line-height 1.75
+- 헤딩: font-weight 700, letter-spacing -0.02em
+- 코드: JetBrains Mono 13px
+
+## 스페이싱
+- 기준 단위: 4px (4, 8, 12, 16, 20, 24, 32, 40, 48, 64)
+- 임의 px 값 금지
+
+## 반경
+- 카드: 10px (--radius)
+- 인라인: 6px (--radius-sm)
+- 알약형: 20px</code></pre>
+
+      <h3>AI 결과물 브랜드 체크리스트</h3>
+      <ul class="styled">
+        <li>색상이 모두 토큰 변수로 지정되어 있는가</li>
+        <li>폰트가 정의된 스택만 사용하는가</li>
+        <li>간격이 스페이싱 단위 기준인가 (4의 배수)</li>
+        <li>기존 컴포넌트를 재사용했는가, 새로 만들었다면 이유가 있는가</li>
+        <li>다크모드에서도 동일하게 읽히는가</li>
+        <li>이 화면이 우리 제품처럼 보이는가 — 마지막 감각적 판단</li>
+      </ul>
     </section>
 
     <!-- Footer -->
