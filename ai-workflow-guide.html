@@ -57,6 +57,7 @@
       <div class="nav-label nav-label-ref">배경</div>
       <a href="#problem-space" class="nav-item nav-item-sub">현장 이슈와 AI 역할 구분</a>
       <a href="#structure" class="nav-item nav-item-sub">문서 레이어 구조</a>
+      <a href="#connect" class="nav-item nav-item-sub">AI 에디터 연결 설정</a>
     </div>
 
     <div class="nav-section">
@@ -446,6 +447,123 @@
       <div class="callout">
         <div class="callout-icon">💡</div>
         <p>처음부터 모두 완성할 필요는 없습니다. <strong>"AI가 디자인할 때 자주 헷갈리는 기준"</strong>부터 작게 문서화하는 것이 핵심입니다.</p>
+      </div>
+    </section>
+
+    <hr class="divider" />
+
+    <!-- AI Editor Connect -->
+    <section class="section" id="connect">
+      <h2>AI 에디터 연결 설정</h2>
+
+      <p><code>docs/</code> 폴더를 만들었다면, 이제 AI가 실제로 이 문서들을 읽게 해야 합니다. 문서가 아무리 잘 만들어져 있어도 AI 에디터에 연결되지 않으면 그냥 폴더 안의 파일입니다.</p>
+
+      <div class="highlight">
+        <p>모든 AI 에디터는 프로젝트 루트의 <strong>특정 파일을 자동으로 읽습니다.</strong> 이 파일 하나가 "AI가 이 프로젝트를 어떻게 이해해야 하는지"를 담는 진입점이 됩니다.</p>
+      </div>
+
+      <h3>도구별 진입점 파일</h3>
+      <table class="doc-table">
+        <thead>
+          <tr>
+            <th>AI 에디터</th>
+            <th>진입점 파일</th>
+            <th>위치</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Claude Code</strong></td><td><code>CLAUDE.md</code></td><td>프로젝트 루트</td></tr>
+          <tr><td><strong>Cursor</strong></td><td><code>.cursor/rules/*.mdc</code></td><td>프로젝트 루트</td></tr>
+          <tr><td><strong>Windsurf</strong></td><td><code>.windsurfrules</code></td><td>프로젝트 루트</td></tr>
+          <tr><td><strong>GitHub Copilot</strong></td><td><code>.github/copilot-instructions.md</code></td><td>프로젝트 루트</td></tr>
+        </tbody>
+      </table>
+
+      <h3>진입점 파일 구조</h3>
+      <p>11개 문서 전체를 복사하지 않습니다. 핵심 규칙만 요약하고 나머지는 참조 경로로 연결합니다.</p>
+
+      <div class="code-label">CLAUDE.md / .cursorrules / .windsurfrules — 공통 구조</div>
+      <pre><code><span class="token-heading"># 이 프로젝트의 AI 작업 기준</span>
+
+<span class="token-heading">## 제품 맥락</span>
+→ docs/product-context.md 참고
+
+<span class="token-heading">## 핵심 UX 원칙 (요약)</span>
+<span class="token-item">- primary action은 한 화면에서 하나만</span>
+<span class="token-item">- 정보 밀도는 사용자 레벨에 맞게 조정</span>
+<span class="token-item">- 설명할 수 없는 UI 요소는 추가하지 않는다</span>
+→ 전체 원칙: docs/ux-principles.md
+
+<span class="token-heading">## 디자인 시스템</span>
+→ docs/design-system.md
+→ docs/component-usage.md
+
+<span class="token-heading">## 반드시 지켜야 할 규칙</span>
+<span class="token-item">- hardcoded color / spacing 금지 — 반드시 token 사용</span>
+<span class="token-item">- 기존 컴포넌트로 해결 가능한지 먼저 확인</span>
+<span class="token-item">- 접근성 속성 임의 삭제 금지</span>
+<span class="token-item">- 요청 범위 밖의 변경 금지</span>
+→ 전체 규칙: docs/agent-rules.md
+
+<span class="token-heading">## 작업 유형별 참조 문서</span>
+신규 화면 → product-context.md + component-usage.md
+기존 화면 개선 → ux-principles.md + component-usage.md
+핸드오프 준비 → handoff.md
+QA → review-checklist.md</code></pre>
+
+      <h3>도구별 세부 설정</h3>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title"><div class="card-title-dot"></div>Claude Code</div>
+          <ul class="styled">
+            <li>프로젝트 루트에 <code>CLAUDE.md</code> 파일 생성</li>
+            <li>Claude Code 실행 시 자동으로 읽힘</li>
+            <li><code>docs/</code> 경로 참조를 쓰면 해당 파일도 자동 로드</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title"><div class="card-title-dot"></div>Cursor</div>
+          <ul class="styled">
+            <li>Cursor Settings → Rules → Project Rules에 추가</li>
+            <li>또는 <code>.cursor/rules/design.mdc</code> 파일로 직접 관리</li>
+            <li>채팅에서 <code>@docs/product-context.md</code>로 파일 직접 첨부 가능</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title"><div class="card-title-dot"></div>Windsurf</div>
+          <ul class="styled">
+            <li>프로젝트 루트에 <code>.windsurfrules</code> 파일 생성</li>
+            <li>Cascade AI가 자동으로 읽음</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title"><div class="card-title-dot"></div>공통 — 작업 시 직접 첨부</div>
+          <ul class="styled">
+            <li>어떤 도구든 채팅에서 파일 내용을 직접 붙이는 방식이 가장 확실</li>
+            <li>중요한 작업일수록 진입점 파일 + 관련 docs 파일을 함께 첨부</li>
+          </ul>
+        </div>
+      </div>
+
+      <h3>프로젝트 루트 구조 예시</h3>
+      <div class="code-label">프로젝트 루트</div>
+      <pre><code><span class="token-section">project-root/</span>
+  <span class="token-heading">CLAUDE.md</span>              <span class="token-comment"># Claude Code 진입점 (핵심 규칙 요약 + docs 참조)</span>
+  <span class="token-heading">.cursor/rules/</span>
+    <span class="token-item">design.mdc</span>           <span class="token-comment"># Cursor 진입점</span>
+  <span class="token-heading">.windsurfrules</span>         <span class="token-comment"># Windsurf 진입점</span>
+  <span class="token-section">docs/</span>
+    <span class="token-item">product-context.md</span>
+    <span class="token-item">ux-principles.md</span>
+    <span class="token-item">design-system.md</span>
+    <span class="token-item">component-usage.md</span>
+    <span class="token-item">agent-rules.md</span>
+    <span class="token-item">...</span></code></pre>
+
+      <div class="callout green">
+        <div class="callout-icon">✅</div>
+        <p>진입점 파일을 만들고 나면 AI는 매번 설명하지 않아도 제품 맥락, 디자인 시스템 규칙, 금지 사항을 기본으로 인식하고 작업합니다. <strong>프롬프트가 짧아지고 결과의 일관성이 올라갑니다.</strong></p>
       </div>
     </section>
 
