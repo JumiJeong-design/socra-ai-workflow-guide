@@ -564,6 +564,35 @@ code {
   color: var(--text-muted);
 }
 
+.copy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 3px 9px;
+  font-size: 10px;
+  font-family: 'Pretendard Variable', 'Pretendard', sans-serif;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+  white-space: nowrap;
+}
+
+.copy-btn:hover {
+  color: var(--text-primary);
+  border-color: var(--accent);
+  background: var(--accent-dim);
+}
+
+.copy-btn.copied {
+  color: var(--green);
+  border-color: rgba(29, 183, 85, 0.3);
+  background: var(--green-dim);
+}
+
 .code-label + pre {
   border-radius: 0 0 var(--radius-sm) var(--radius-sm);
   margin-top: 0;

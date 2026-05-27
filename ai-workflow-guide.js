@@ -38,6 +38,30 @@ document.querySelectorAll('.nav-item').forEach(item => {
   });
 });
 
+// Copy buttons for code blocks
+document.querySelectorAll('.code-label').forEach(label => {
+  const pre = label.nextElementSibling;
+  if (!pre || pre.tagName !== 'PRE') return;
+
+  const btn = document.createElement('button');
+  btn.className = 'copy-btn';
+  btn.textContent = '복사';
+  btn.setAttribute('aria-label', '코드 복사');
+  label.appendChild(btn);
+
+  btn.addEventListener('click', () => {
+    const text = pre.querySelector('code')?.innerText || pre.innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = '✓ 복사됨';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = '복사';
+        btn.classList.remove('copied');
+      }, 1800);
+    });
+  });
+});
+
 // Scroll-spy: highlight active nav item
 const sections = document.querySelectorAll('section[id], div.hero');
 const navItems = document.querySelectorAll('.nav-item');
@@ -45,9 +69,15 @@ const navItems = document.querySelectorAll('.nav-item');
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
-      navItems.forEach(item => item.classList.remove('active'));
+      navItems.forEach(item => {
+        item.classList.remove('active');
+        item.removeAttribute('aria-current');
+      });
       const active = document.querySelector(`.nav-item[href="#${entry.target.id}"]`);
-      if (active) active.classList.add('active');
+      if (active) {
+        active.classList.add('active');
+        active.setAttribute('aria-current', 'true');
+      }
     }
   });
 }, { rootMargin: '-20% 0px -70% 0px' });
