@@ -51,12 +51,12 @@ body {
   left: 0;
   right: 0;
   /* safe area: notch / Dynamic Island / Android punch-hole */
-  height: calc(52px + env(safe-area-inset-top, 0px));
+  height: calc(60px + env(safe-area-inset-top, 0px));
   background: var(--bg-card);
   border-bottom: 1px solid var(--border);
   z-index: 200;
   align-items: flex-end;
-  padding: 0 calc(16px + env(safe-area-inset-right, 0px)) 0 calc(16px + env(safe-area-inset-left, 0px));
+  padding: 0 calc(20px + env(safe-area-inset-right, 0px)) 10px calc(20px + env(safe-area-inset-left, 0px));
   padding-top: env(safe-area-inset-top, 0px);
   gap: 12px;
 }
@@ -980,11 +980,11 @@ ol.styled li::before {
   .sidebar {
     position: fixed;
     /* topbar height + notch/Dynamic Island/punch-hole */
-    top: calc(52px + env(safe-area-inset-top, 0px));
+    top: calc(60px + env(safe-area-inset-top, 0px));
     left: 0;
     /* 100dvh: 모바일 브라우저 주소창 show/hide 대응 (100vh fallback) */
-    height: calc(100vh - 52px - env(safe-area-inset-top, 0px));
-    height: calc(100dvh - 52px - env(safe-area-inset-top, 0px));
+    height: calc(100vh - 60px - env(safe-area-inset-top, 0px));
+    height: calc(100dvh - 60px - env(safe-area-inset-top, 0px));
     /* 홈 인디케이터 영역 침범 방지 */
     padding-bottom: env(safe-area-inset-bottom, 0px);
     z-index: 160;
@@ -1000,7 +1000,7 @@ ol.styled li::before {
 
   .main {
     /* topbar + safe area top 만큼 밀어내기 */
-    padding: calc(72px + env(safe-area-inset-top, 0px)) calc(24px + env(safe-area-inset-right, 0px)) 60px calc(24px + env(safe-area-inset-left, 0px));
+    padding: calc(80px + env(safe-area-inset-top, 0px)) calc(24px + env(safe-area-inset-right, 0px)) 60px calc(24px + env(safe-area-inset-left, 0px));
     max-width: 100%;
   }
 
@@ -1017,7 +1017,7 @@ ol.styled li::before {
 /* ─── Responsive: Mobile (≤640px) ─── */
 @media (max-width: 640px) {
   .main {
-    padding: calc(68px + env(safe-area-inset-top, 0px)) calc(16px + env(safe-area-inset-right, 0px)) calc(48px + env(safe-area-inset-bottom, 0px)) calc(16px + env(safe-area-inset-left, 0px));
+    padding: calc(76px + env(safe-area-inset-top, 0px)) calc(16px + env(safe-area-inset-right, 0px)) calc(48px + env(safe-area-inset-bottom, 0px)) calc(16px + env(safe-area-inset-left, 0px));
   }
 
   .hero { margin-bottom: 36px; padding-bottom: 28px; }
