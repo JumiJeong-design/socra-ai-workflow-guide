@@ -82,12 +82,6 @@ fetch('sidebar.html')
   });
 
 function initSidebarInteractions() {
-  // Version select → changelog
-  const versionSelect = document.getElementById('version-select');
-  if (versionSelect) {
-    versionSelect.addEventListener('change', () => { window.location.href = 'changelog.html'; });
-  }
-
   // Sidebar theme toggle
   const sidebarToggle = sidebarEl.querySelector('.theme-toggle');
   if (sidebarToggle) {

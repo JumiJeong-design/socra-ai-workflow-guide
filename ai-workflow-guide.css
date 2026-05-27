@@ -148,63 +148,11 @@ body {
 .sidebar::-webkit-scrollbar-track { background: transparent; }
 .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
 
-/* Version selector */
+/* Version / changelog link row */
 .sidebar-version {
   padding: 10px 16px 12px;
   border-bottom: 1px solid var(--border);
   background: var(--bg);
-}
-
-.sidebar-version-label {
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  margin-bottom: 6px;
-}
-
-.version-select-wrap {
-  position: relative;
-}
-
-.version-select-wrap::after {
-  content: '▾';
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 10px;
-  color: var(--text-muted);
-  pointer-events: none;
-}
-
-.version-select {
-  width: 100%;
-  appearance: none;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 6px 28px 6px 10px;
-  font-size: 11.5px;
-  font-weight: 600;
-  font-family: inherit;
-  color: var(--text-secondary);
-  cursor: pointer;
-  outline: none;
-  transition: border-color 0.15s, color 0.15s;
-}
-
-.version-select:hover,
-.version-select:focus {
-  border-color: var(--accent);
-  color: var(--text-primary);
-}
-
-.version-select option {
-  background: var(--bg-card);
-  color: var(--text-primary);
-  font-size: 12px;
 }
 
 /* Sidebar logo */
