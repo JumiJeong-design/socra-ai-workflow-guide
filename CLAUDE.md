@@ -19,3 +19,6 @@
 | 트리거 | 스킬 | 위치 |
 |--------|------|------|
 | `워크로그 써줘`, `오늘 정리해줘`, `/write-worklog` | write-worklog | `jumi-worklog/skills/write-worklog/SKILL.md` |
+| `버전 올려줘`, `배포할게`, `/bump-version` | bump-version | `jumi-worklog/skills/bump-version/SKILL.md` |
+| `미팅 준비해줘`, `이번주 요약해줘`, `/prep-meeting` | prep-meeting | `jumi-worklog/skills/prep-meeting/SKILL.md` |
+| `이거 기억해줘`, `규칙 추가해줘`, `/record-trap` | record-trap | `jumi-worklog/skills/record-trap/SKILL.md` |
