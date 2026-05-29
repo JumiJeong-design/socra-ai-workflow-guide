@@ -129,8 +129,16 @@ body{
 }
 .skill-card{
   background:var(--surface-2);border:1px solid var(--border);border-radius:8px;
-  padding:12px 12px 10px;margin-bottom:8px
+  padding:12px 12px 10px;margin-bottom:8px;transition:border-color .12s
 }
+.skill-card.expanded{border-color:var(--accent)}
+.skill-card-header{display:flex;align-items:flex-start;justify-content:space-between;cursor:pointer;gap:8px}
+.skill-header-text{flex:1;min-width:0}
+.skill-toggle{
+  color:var(--text-dim);font-size:16px;line-height:1;
+  transition:transform .2s;flex-shrink:0;margin-top:2px;user-select:none
+}
+.skill-card.expanded .skill-toggle{transform:rotate(90deg);color:var(--accent)}
 .skill-name{
   font-size:12px;font-weight:700;color:var(--accent);
   font-family:'SF Mono','Fira Code','Fira Mono',monospace;margin-bottom:4px
@@ -142,6 +150,13 @@ body{
   color:var(--text-muted);padding:2px 6px;border-radius:4px;
   font-family:'SF Mono','Fira Code','Fira Mono',monospace
 }
+.skill-detail{
+  display:none;margin-top:10px;padding-top:10px;
+  border-top:1px solid var(--border)
+}
+.skill-card.expanded .skill-detail{display:block}
+.skill-steps{padding-left:16px;margin:0}
+.skill-steps li{font-size:11px;color:var(--text-muted);margin-bottom:4px;line-height:1.5}
 .skills-link{
   display:block;text-align:center;font-size:11px;color:var(--text-dim);
   padding:10px;text-decoration:none;
@@ -296,43 +311,96 @@ body{
     <div class="skills-panel">
       <div class="skills-panel-title">공통 스킬</div>
 
-      <div class="skill-card">
-        <div class="skill-name">write-worklog</div>
-        <div class="skill-desc">오늘 세션 작업 내용을 worklog 형식으로 정리하고 GitHub에 push</div>
+      <div class="skill-card" id="skill-write-worklog">
+        <div class="skill-card-header" onclick="toggleSkill('write-worklog')">
+          <div class="skill-header-text">
+            <div class="skill-name">write-worklog</div>
+            <div class="skill-desc">요약 → 문서화 → GitHub push → Notion 업로드 자동화</div>
+          </div>
+          <span class="skill-toggle">›</span>
+        </div>
         <div class="skill-triggers">
           <span class="skill-trigger">워크로그 써줘</span>
           <span class="skill-trigger">오늘 정리해줘</span>
           <span class="skill-trigger">/write-worklog</span>
         </div>
+        <div class="skill-detail">
+          <ol class="skill-steps">
+            <li>최근 worklog 읽기 — 미완료 항목 이월</li>
+            <li>대화에서 오늘 작업·커밋·함정 추출</li>
+            <li>초안 확인 후 수정 반영</li>
+            <li>GitHub jumi-worklog에 push</li>
+            <li>Notion 디자인팀 DB에 로그 업로드</li>
+          </ol>
+        </div>
       </div>
 
-      <div class="skill-card">
-        <div class="skill-name">bump-version</div>
-        <div class="skill-desc">socra-ai-workflow-guide 버전 올릴 때 4개 파일 동시 수정 (날짜 오타 방지)</div>
+      <div class="skill-card" id="skill-bump-version">
+        <div class="skill-card-header" onclick="toggleSkill('bump-version')">
+          <div class="skill-header-text">
+            <div class="skill-name">bump-version</div>
+            <div class="skill-desc">socra-ai-workflow-guide 버전 올릴 때 4개 파일 동시 수정</div>
+          </div>
+          <span class="skill-toggle">›</span>
+        </div>
         <div class="skill-triggers">
           <span class="skill-trigger">버전 올려줘</span>
           <span class="skill-trigger">배포할게</span>
           <span class="skill-trigger">/bump-version</span>
         </div>
+        <div class="skill-detail">
+          <ol class="skill-steps">
+            <li>새 버전 번호 + 날짜 확인 (currentDate 자동 추출)</li>
+            <li>sidebar.html 버전 선택기 업데이트</li>
+            <li>ai-workflow-guide.html 버전 뱃지 수정</li>
+            <li>changelog.html 신규 항목 추가</li>
+            <li>index.html 메타 버전 수정</li>
+          </ol>
+        </div>
       </div>
 
-      <div class="skill-card">
-        <div class="skill-name">prep-meeting</div>
-        <div class="skill-desc">worklog 읽어서 이번 주 업무 요약 + 미팅 아젠다 자동 정리</div>
+      <div class="skill-card" id="skill-prep-meeting">
+        <div class="skill-card-header" onclick="toggleSkill('prep-meeting')">
+          <div class="skill-header-text">
+            <div class="skill-name">prep-meeting</div>
+            <div class="skill-desc">worklog 읽어서 이번 주 업무 요약 + 미팅 아젠다 자동 정리</div>
+          </div>
+          <span class="skill-toggle">›</span>
+        </div>
         <div class="skill-triggers">
           <span class="skill-trigger">미팅 준비해줘</span>
           <span class="skill-trigger">이번주 요약해줘</span>
           <span class="skill-trigger">/prep-meeting</span>
         </div>
+        <div class="skill-detail">
+          <ol class="skill-steps">
+            <li>최근 7일 worklog 파일 읽기</li>
+            <li>완료 작업 / 미완료 / 결정 사항 추출</li>
+            <li>미팅 대상 확인 (기획 / 프론트 / 전체)</li>
+            <li>대상 맞춤 아젠다 생성 후 채팅에 출력</li>
+          </ol>
+        </div>
       </div>
 
-      <div class="skill-card">
-        <div class="skill-name">record-trap</div>
-        <div class="skill-desc">실수·함정 발생 시 rules.md + agent-rules.md 동시 업데이트</div>
+      <div class="skill-card" id="skill-record-trap">
+        <div class="skill-card-header" onclick="toggleSkill('record-trap')">
+          <div class="skill-header-text">
+            <div class="skill-name">record-trap</div>
+            <div class="skill-desc">실수·함정 발생 시 rules.md + agent-rules.md 동시 업데이트</div>
+          </div>
+          <span class="skill-toggle">›</span>
+        </div>
         <div class="skill-triggers">
           <span class="skill-trigger">이거 기억해줘</span>
           <span class="skill-trigger">규칙 추가해줘</span>
           <span class="skill-trigger">/record-trap</span>
+        </div>
+        <div class="skill-detail">
+          <ol class="skill-steps">
+            <li>함정 유형 파악 (디자인/Figma vs AI 동작)</li>
+            <li>design-system/rules.md 또는 docs/agent-rules.md 업데이트</li>
+            <li>오늘 worklog 함정 모음 섹션에 추가</li>
+          </ol>
         </div>
       </div>
 
@@ -1089,6 +1157,10 @@ function setView(mode) {
     skillsSection.style.display = 'none';
     buildList();
   }
+}
+
+function toggleSkill(id) {
+  document.getElementById('skill-' + id).classList.toggle('expanded');
 }
 
 function buildList() {
