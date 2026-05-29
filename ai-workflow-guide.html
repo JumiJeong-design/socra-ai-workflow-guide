@@ -613,6 +613,116 @@ QA → review-checklist.md</code></pre>
         <div class="callout-icon">✅</div>
         <p>진입점 파일을 만들고 나면 AI는 매번 설명하지 않아도 제품 맥락, 디자인 시스템 규칙, 금지 사항을 기본으로 인식하고 작업합니다. <strong>프롬프트가 짧아지고 결과의 일관성이 올라갑니다.</strong></p>
       </div>
+
+      <h3 id="figma-mcp-setup">Figma MCP 연결 설정</h3>
+      <p>Figma MCP는 AI 에디터가 Figma 파일을 읽고, 필요한 경우 캔버스에 직접 쓰기 작업까지 수행할 수 있게 하는 연결 통로입니다. 문서 컨텍스트와 달리 <strong>Figma 계정 권한, 파일 접근 권한, 사용하는 MCP 방식</strong>이 함께 맞아야 안정적으로 동작합니다.</p>
+
+      <div class="callout">
+        <div class="callout-icon">📌</div>
+        <p><strong>최신 기준:</strong> Figma 공식 문서는 대부분의 사용자는 Remote MCP 서버를 쓰는 것을 권장합니다. Desktop MCP 서버는 Figma 데스크탑 앱을 통해 실행되며, 특정 조직/엔터프라이즈 환경에서 필요할 수 있습니다.</p>
+      </div>
+
+      <p style="font-size:13px; color:var(--text-muted); margin-top:-8px;">공식 문서 참고: <a href="https://developers.figma.com/docs/figma-mcp-server" target="_blank" style="color:var(--accent);">Figma MCP Server</a> · <a href="https://help.figma.com/hc/en-us/articles/39888612464151-Claude-Code-and-Figma-Set-up-the-MCP-server" target="_blank" style="color:var(--accent);">Claude Code MCP 설정</a> · <a href="https://developers.figma.com/docs/figma-mcp-server/local-server-installation/" target="_blank" style="color:var(--accent);">Desktop MCP 설정</a></p>
+
+      <table class="doc-table">
+        <thead>
+          <tr>
+            <th>구분</th>
+            <th>Remote MCP</th>
+            <th>Desktop MCP</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>권장 상황</strong></td>
+            <td>대부분의 일반 사용, Claude Code/Cursor/Codex 같은 MCP 지원 도구 연결</td>
+            <td>로컬 데스크탑 앱 기반 연결이 필요한 조직/엔터프라이즈 환경</td>
+          </tr>
+          <tr>
+            <td><strong>실행 방식</strong></td>
+            <td>Figma의 호스팅 엔드포인트에 연결</td>
+            <td>Figma 데스크탑 앱에서 Dev Mode MCP 서버를 켜고 로컬로 연결</td>
+          </tr>
+          <tr>
+            <td><strong>인증</strong></td>
+            <td>Figma OAuth 승인 중심</td>
+            <td>데스크탑 앱 + MCP 클라이언트 설정 필요</td>
+          </tr>
+          <tr>
+            <td><strong>주의점</strong></td>
+            <td>승인한 Figma 계정이 접근 가능한 파일만 사용할 수 있음</td>
+            <td>Figma 데스크탑 앱이 실행 중이고, 대상 파일이 열려 있어야 안정적</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>연결 전 확인할 것</h3>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title"><div class="card-title-dot"></div>계정 / 권한</div>
+          <ul class="styled">
+            <li>OAuth를 승인하는 Figma 계정이 실제 작업 파일에 접근 가능한지 확인</li>
+            <li>팀 파일을 다룰 경우 Dev 또는 Full seat 권한이 필요한지 확인</li>
+            <li>공용 계정으로 연결한다면 누가, 어떤 범위까지 접근 가능한지 기록</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title"><div class="card-title-dot"></div>작업 대상</div>
+          <ul class="styled">
+            <li>파일 URL뿐 아니라 작업할 page 또는 node URL까지 준비</li>
+            <li>여러 페이지가 있는 파일은 AI가 첫 페이지를 기준으로 작업하지 않도록 명시</li>
+            <li>Variables, styles, components를 읽을 수 있는지 첫 테스트에서 확인</li>
+          </ul>
+        </div>
+      </div>
+
+      <h3>기본 연결 흐름</h3>
+      <div class="flow">
+        <div class="flow-item">
+          <strong>1. AI 도구에서 Figma MCP 또는 Figma 플러그인 연결</strong>
+          <div class="subdesc">Claude Code, Cursor, Codex 등 사용하는 MCP 클라이언트의 공식 연결 방식을 따릅니다.</div>
+        </div>
+        <div class="flow-item">
+          <strong>2. Figma OAuth 승인 계정 확인</strong>
+          <div class="subdesc">승인한 계정이 볼 수 있는 파일만 AI가 접근할 수 있습니다. 팀 파일이면 개인 계정/공용 계정 선택을 먼저 정합니다.</div>
+        </div>
+        <div class="flow-item">
+          <strong>3. Desktop MCP를 쓰는 경우 Dev Mode에서 서버 활성화</strong>
+          <div class="subdesc">Figma 데스크탑 앱에서 대상 파일을 열고 Dev Mode로 전환한 뒤 MCP 서버가 켜져 있는지 확인합니다.</div>
+        </div>
+        <div class="flow-item">
+          <strong>4. IDE/터미널에서 MCP 상태 확인</strong>
+          <div class="subdesc">Claude Code라면 <code>/mcp</code> 같은 서버 상태 화면에서 연결 실패 여부를 확인하고 필요 시 reconnect합니다.</div>
+        </div>
+        <div class="flow-item highlight-item">
+          <strong>5. 첫 테스트는 읽기 작업으로 시작</strong>
+          <div class="subdesc">Figma 링크를 주고 "이 파일의 page 목록, 선택한 frame의 metadata, variables를 읽을 수 있는지 확인해줘"처럼 요청합니다.</div>
+        </div>
+      </div>
+
+      <div class="compare">
+        <div class="compare-box bad">
+          <div class="compare-label">그대로 적으면 위험한 말</div>
+          <ul class="styled" style="margin:0;">
+            <li>"신형 MCP는 항상 Figma 서버에서만 실행된다"</li>
+            <li>"Variable 컬러는 AI가 못 읽는다"</li>
+            <li>"로컬 폰트는 무조건 사용할 수 없다"</li>
+          </ul>
+        </div>
+        <div class="compare-box good">
+          <div class="compare-label">정확한 표현</div>
+          <ul class="styled" style="margin:0;">
+            <li>Remote MCP와 Desktop MCP는 설정 방식이 다르다</li>
+            <li>Variables는 연결 권한과 파일 구조가 맞으면 읽을 수 있다</li>
+            <li>폰트 접근은 Remote/Desktop 방식, Figma 업로드 여부에 따라 달라질 수 있다</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout orange">
+        <div class="callout-icon">⚠️</div>
+        <p><strong>MCP 연결 정보도 운영 문서에 남깁니다.</strong> 어떤 계정으로 승인했는지, 어떤 파일을 테스트했는지, 연결 실패 시 어디서 reconnect하는지 기록해두면 공용 계정·공용 파일에서 같은 시행착오를 반복하지 않습니다.</p>
+      </div>
     </section>
 
     <hr class="divider" />
