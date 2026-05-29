@@ -74,12 +74,151 @@ document.querySelectorAll('.code-label').forEach(label => {
 });
 
 // ─── Sidebar (shared, fetched) ────────────────────────────
-fetch('sidebar.html?v=0.8')
+fetch('sidebar.html?v=0.9')
   .then(res => res.text())
   .then(html => {
     sidebarEl.innerHTML = html;
     initSidebarInteractions();
+    initSiteSearch();
   });
+
+const SEARCH_PAGES = [
+  { path: 'index.html', label: '홈' },
+  { path: 'ai-workflow-guide.html', label: '가이드' },
+  { path: 'figma-mcp-traps.html', label: 'MCP 함정' },
+  { path: 'changelog.html', label: 'Changelog' }
+];
+
+let searchIndexPromise;
+
+function normalizeText(text) {
+  return (text || '').replace(/\s+/g, ' ').trim();
+}
+
+function escapeHtml(text) {
+  return String(text).replace(/[&<>"']/g, char => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;'
+  }[char]));
+}
+
+function getPageBasePath() {
+  const parts = location.pathname.split('/');
+  parts.pop();
+  return parts.join('/') + '/';
+}
+
+function buildEntriesFromDocument(doc, page) {
+  const entries = [];
+  const pageTitle = normalizeText(doc.querySelector('h1')?.textContent) || page.label;
+  const targets = [
+    ...doc.querySelectorAll('section[id]'),
+    ...doc.querySelectorAll('h3[id]'),
+    ...doc.querySelectorAll('[id^="trap-"]')
+  ];
+  const seen = new Set();
+
+  targets.forEach(target => {
+    const id = target.id;
+    if (!id || seen.has(id)) return;
+    seen.add(id);
+
+    const title = normalizeText(
+      target.querySelector?.('h2, h3, strong, .home-group-title, .card-title')?.textContent ||
+      target.textContent.split('\n')[0]
+    );
+    const text = normalizeText(target.textContent);
+    if (!title || text.length < 12) return;
+
+    entries.push({
+      title,
+      page: page.label,
+      href: `${page.path}#${id}`,
+      text: `${pageTitle} ${title} ${text}`.toLowerCase(),
+      snippet: text.length > 110 ? `${text.slice(0, 110)}...` : text
+    });
+  });
+
+  return entries;
+}
+
+function getSearchIndex() {
+  if (searchIndexPromise) return searchIndexPromise;
+  const parser = new DOMParser();
+  searchIndexPromise = Promise.all(SEARCH_PAGES.map(page =>
+    fetch(page.path)
+      .then(res => res.text())
+      .then(html => buildEntriesFromDocument(parser.parseFromString(html, 'text/html'), page))
+      .catch(() => [])
+  )).then(groups => groups.flat());
+  return searchIndexPromise;
+}
+
+function renderSearchResults(resultsEl, results, query) {
+  if (!query) {
+    resultsEl.hidden = true;
+    resultsEl.innerHTML = '';
+    return;
+  }
+
+  resultsEl.hidden = false;
+  if (results.length === 0) {
+    resultsEl.innerHTML = `<div class="sidebar-search-empty">검색 결과가 없습니다.</div>`;
+    return;
+  }
+
+  resultsEl.innerHTML = results.slice(0, 7).map(result => `
+    <a class="sidebar-search-result" href="${result.href}">
+      <div class="sidebar-search-result-title">${escapeHtml(result.title)}</div>
+      <div class="sidebar-search-result-meta">${escapeHtml(result.page)}</div>
+      <div class="sidebar-search-result-snippet">${escapeHtml(result.snippet)}</div>
+    </a>
+  `).join('');
+
+  resultsEl.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => { if (window.innerWidth <= 900) closeSidebar(); });
+  });
+}
+
+function initSiteSearch() {
+  const input = sidebarEl.querySelector('#site-search-input');
+  const resultsEl = sidebarEl.querySelector('#site-search-results');
+  if (!input || !resultsEl) return;
+
+  input.addEventListener('input', () => {
+    const query = normalizeText(input.value).toLowerCase();
+    if (query.length < 2) {
+      renderSearchResults(resultsEl, [], '');
+      return;
+    }
+
+    getSearchIndex().then(index => {
+      const terms = query.split(' ').filter(Boolean);
+      const results = index
+        .map(entry => {
+          const title = entry.title.toLowerCase();
+          const score = terms.reduce((total, term) => {
+            if (title.includes(term)) return total + 4;
+            if (entry.text.includes(term)) return total + 1;
+            return total;
+          }, 0);
+          return { ...entry, score };
+        })
+        .filter(entry => entry.score > 0)
+        .sort((a, b) => b.score - a.score || a.title.localeCompare(b.title, 'ko'));
+      renderSearchResults(resultsEl, results, query);
+    });
+  });
+
+  input.addEventListener('keydown', event => {
+    if (event.key !== 'Enter') return;
+    const first = resultsEl.querySelector('a');
+    if (first) first.click();
+  });
+}
 
 function initSidebarInteractions() {
   // Sidebar theme toggle

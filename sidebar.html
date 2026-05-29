@@ -1,7 +1,7 @@
 <div class="sidebar-version">
   <div style="display:flex; align-items:center; justify-content:space-between;">
     <a href="changelog.html" data-nav="changelog" style="display:inline-flex; align-items:center; gap:6px; font-size:11px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:var(--text-muted); text-decoration:none; transition:color 0.15s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-muted)'">
-      <span>↻</span> v0.8 Changelog
+      <span>↻</span> v0.9 Changelog
     </a>
     <button class="theme-toggle" aria-label="다크 모드로 전환"></button>
   </div>
@@ -17,6 +17,12 @@
   </div>
   <div class="sidebar-title">운영 문서 구축 가이드</div>
   <div class="sidebar-subtitle">프로덕트 디자이너를 위한</div>
+</div>
+
+<div class="sidebar-search">
+  <label for="site-search-input">문서 검색</label>
+  <input id="site-search-input" type="search" placeholder="MCP, QA, 모션, 토큰..." autocomplete="off" />
+  <div id="site-search-results" class="sidebar-search-results" hidden></div>
 </div>
 
 <div class="nav-section">
