@@ -174,6 +174,10 @@ body {
   background: var(--bg);
 }
 
+.sidebar-version a.active {
+  color: var(--accent) !important;
+}
+
 /* Sidebar logo */
 .sidebar-logo {
   padding: 14px 20px 20px;
