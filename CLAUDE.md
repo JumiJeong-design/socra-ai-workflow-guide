@@ -10,3 +10,12 @@
 2. `ai-workflow-guide.html` — 상단 버전 배지 + 인라인 changelog 항목
 3. `changelog.html` — 버전 섹션 신규 추가
 4. 필요 시 `index.html` — 신규 카드 추가
+
+## 공통 스킬
+
+프로젝트 무관 공통 스킬은 `JumiJeong-design/jumi-worklog/skills/` 에 있다.
+사용자가 아래 트리거를 입력하면 해당 SKILL.md를 읽어서 실행한다.
+
+| 트리거 | 스킬 | 위치 |
+|--------|------|------|
+| `워크로그 써줘`, `오늘 정리해줘`, `/write-worklog` | write-worklog | `jumi-worklog/skills/write-worklog/SKILL.md` |
