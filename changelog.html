@@ -34,6 +34,31 @@
       <p>AI Workflow 가이드의 변경 사항을 버전별로 기록합니다.</p>
     </div>
 
+    <!-- v0.11 -->
+    <section class="section" id="v0-11">
+      <div class="section-header">
+        <div class="section-num">0.11</div>
+        <h2>콘텐츠 정확도 개선 <span class="section-tag">2026.05.29</span></h2>
+      </div>
+
+      <div class="highlight">
+        <p>가이드 내 수치·기준·표현이 실제 사실과 다르거나 오해를 줄 수 있는 7개 항목을 수정했습니다. 새 기능 추가보다 정확도와 독자 신뢰도를 높이는 데 집중한 버전입니다.</p>
+      </div>
+
+      <h3>수정 내용</h3>
+      <ul class="styled">
+        <li><strong>반응형 브레이크포인트 기기 정보 수정</strong> — iPhone 14를 375px에서 390px로 수정, 360px Mobile S 추가, iPhone SE 2/3세대·iPhone 8을 375px로 정정</li>
+        <li><strong>터치 타겟 기준 명확화</strong> — "최소 44×44px" 표현을 "권장 44×44px / 최소 24×24px(WCAG 2.2 AA)"로 변경. hit area 개념 설명 추가 (16px 아이콘 + 4px 패딩 = 24px hit area)</li>
+        <li><strong>disabled WCAG contrast 적용 범위 수정</strong> — disabled 상태는 WCAG contrast 적용 대상에서 제외됨을 명시. 색상만으로 비활성 여부를 전달할 경우 인지 가능 수준의 대비를 유지하도록 권고하는 형태로 재서술</li>
+        <li><strong>i18n 텍스트 길이 변화 설명 구체화</strong> — "영어는 한국어보다 평균 30~40% 길다"는 단순 수치 대신 단어·방향·길이에 따라 다르게 적용된다는 내용으로 구체화</li>
+        <li><strong>MCP 연결 실패 5단계 진단 플로우 추가</strong> — Figma MCP 연결 실패 시 서버 상태 → 파일 권한 → OAuth 재인증 → Desktop 앱 상태 → 읽기/쓰기 범위 순서로 점검하는 진단 플로우 추가</li>
+        <li><strong>vectorPaths 항목 관측 출처 명시</strong> — 미지원 SVG 커맨드 목록이 공식 문서가 아닌 실전 파싱 오류 관측 기반임을 명시. 레이블도 "지원 안 되는 SVG 커맨드" → "실전에서 문제가 발생한 SVG 커맨드"로 변경</li>
+        <li><strong>섹션 번호 중복 제거</strong> — 문서 목적(01)·핵심 관점(02) 인트로 섹션의 번호가 실무 운영 01~05와 중복되어 혼란을 줬던 문제 해결</li>
+      </ul>
+    </section>
+
+    <hr class="divider" />
+
     <!-- v0.10 -->
     <section class="section" id="v0-10">
       <div class="section-header">
