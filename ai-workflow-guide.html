@@ -2416,7 +2416,7 @@ docs/
         <li><strong>iOS Safe Area</strong> — <code>env(safe-area-inset-*)</code> 적용. Dynamic Island(iPhone 14 Pro+), 홈 인디케이터 영역 침범 여부</li>
         <li><strong>Android Punch-hole</strong> — 상단 카메라 영역 겹침. <code>viewport-fit=cover</code> + safe-area 처리 동일 적용</li>
         <li><strong>모바일 주소창 높이</strong> — <code>100vh</code> 대신 <code>100dvh</code> 사용. 주소창 show/hide 시 레이아웃 튀는 현상 방지</li>
-        <li><strong>터치 타겟</strong> — 권장 44×44px, 최소 24×24px. 버튼·링크처럼 빈번히 쓰이는 요소는 44px를 목표로, 아이콘처럼 공간이 제한된 경우에도 24px 아래로는 내리지 않는다</li>
+        <li><strong>터치 타겟</strong> — 시각적 크기(icon 16px 등)와 실제 터치 가능 영역(hit area)은 다르다. padding으로 hit area를 키우는 것이 기본 패턴. 권장 44×44px, 최소 24×24px (WCAG 2.2 AA). 버튼·링크처럼 빈번히 쓰이는 요소는 44px를 목표로. 아이콘처럼 공간이 제한된 경우 44px로 키우면 인접 요소 터치 영역과 겹치므로 24px 이상을 유지하는 것이 현실적인 기준</li>
         <li><strong>가로 모드</strong> — landscape 전환 시 레이아웃 깨짐 여부 확인</li>
         <li><strong>텍스트 확대</strong> — OS 텍스트 크기 150% 설정 시 레이아웃 유지 여부</li>
       </ul>
