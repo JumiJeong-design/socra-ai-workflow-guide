@@ -797,6 +797,30 @@ QA → review-checklist.md</code></pre>
         </div>
       </div>
 
+      <h3>연결 실패 시 단계별 진단</h3>
+      <div class="flow">
+        <div class="flow-item">
+          <strong>1. MCP 서버 상태 먼저 확인</strong>
+          <div class="subdesc">Claude Code라면 <code>/mcp</code>로 서버 목록 확인. 연결 상태가 error이면 reconnect 시도. Cursor/Windsurf는 설정 화면의 MCP 서버 목록에서 확인.</div>
+        </div>
+        <div class="flow-item">
+          <strong>2. 서버는 연결됐는데 파일을 못 읽는 경우 → 권한 확인</strong>
+          <div class="subdesc">OAuth 승인한 Figma 계정이 해당 파일에 실제 접근 권한이 있는지 확인. 팀 파일은 개인 계정 권한이 없으면 읽기도 실패함. 파일 URL을 직접 브라우저에서 열어 접근 가능한지 먼저 체크.</div>
+        </div>
+        <div class="flow-item">
+          <strong>3. OAuth 인증 자체가 안 되는 경우 → 재인증</strong>
+          <div class="subdesc">토큰이 만료됐거나 브라우저 팝업이 차단된 경우. MCP 설정에서 연결을 제거하고 다시 추가해 OAuth 플로우를 새로 진행.</div>
+        </div>
+        <div class="flow-item">
+          <strong>4. Desktop MCP인 경우 → 앱 상태 확인</strong>
+          <div class="subdesc">Figma 데스크탑 앱이 실행 중인지, Dev Mode로 전환되어 있는지, MCP 서버가 켜져 있는지 순서대로 확인. 앱을 재시작하면 해결되는 경우가 많음.</div>
+        </div>
+        <div class="flow-item highlight-item">
+          <strong>5. 그래도 안 되면 — 간단한 읽기 테스트로 범위 좁히기</strong>
+          <div class="subdesc">"이 파일 URL의 page 목록만 읽어줘"처럼 가장 단순한 읽기 요청부터 시도. 읽기는 되는데 쓰기가 안 된다면 권한 문제, 둘 다 안 된다면 연결 자체 문제.</div>
+        </div>
+      </div>
+
       <div class="callout orange">
         <div class="callout-icon">⚠️</div>
         <p><strong>MCP 연결 정보도 운영 문서에 남깁니다.</strong> 어떤 계정으로 승인했는지, 어떤 파일을 테스트했는지, 연결 실패 시 어디서 reconnect하는지 기록해두면 공용 계정·공용 파일에서 같은 시행착오를 반복하지 않습니다.</p>
@@ -1186,7 +1210,7 @@ primary action은 한 화면에서 하나를 원칙으로 한다.
 <span class="token-item">- large text / UI graphical object는 3:1 이상.</span>
 <span class="token-item">- focus 상태는 시각적으로 명확해야 한다. (focus ring 식별 가능)</span>
 <span class="token-item">- keyboard interaction을 지원해야 한다. (Enter, Space)</span>
-<span class="token-item">- disabled 상태에서도 contrast 기준을 참고한다.</span>
+<span class="token-item">- disabled 상태는 WCAG contrast 요구사항 적용 대상에서 제외되지만, 비활성 여부를 색상만으로 전달하는 경우 인지 가능한 수준의 대비를 유지하는 것이 좋다.</span>
 
 <span class="token-heading">## Storybook 확인 상태</span>
 default / hover / focus / disabled / loading / long text / mobile / dark mode</code></pre>
@@ -2332,7 +2356,7 @@ border: 1px solid var(--border);</code></pre>
       <h3>핵심 원칙</h3>
       <ul class="styled">
         <li><strong>텍스트 하드코딩 금지</strong> — 모든 노출 문자열은 locale 파일에서 관리. 컴포넌트에 한국어 직접 입력 금지</li>
-        <li><strong>레이아웃은 텍스트 길이에 유연하게</strong> — 영어는 한국어보다 평균 30~40% 길 수 있음. 고정 너비 버튼·레이블 주의</li>
+        <li><strong>레이아웃은 텍스트 길이에 유연하게</strong> — 영어는 단어 단위로 렌더링되어 긴 레이블("비밀번호 변경" → "Change Password")은 20–40% 더 넓어질 수 있음. 반면 짧은 단어("저장" → "Save")는 영어가 오히려 짧은 경우도 있으니 실제 문자열 기준으로 확인 필요. 고정 너비 버튼·레이블 주의</li>
         <li><strong>폰트는 언어별로</strong> — 한국어 Pretendard, 영어 Inter/system-ui 등 언어별 폰트 스택 분리</li>
       </ul>
 
