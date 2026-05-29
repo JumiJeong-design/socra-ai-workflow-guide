@@ -115,12 +115,38 @@ body{
 .list-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:5px}
 .list-tag{font-size:10px;color:var(--text-dim);background:var(--surface-2);
   padding:1px 6px;border-radius:20px;border:1px solid var(--border)}
-/* compact variant (shown under calendar) */
 .list-item.compact{flex-direction:row;align-items:center;gap:10px;padding:7px 14px}
 .list-item.compact .list-dot{width:6px;height:6px;border-radius:50%;background:var(--border);flex-shrink:0}
 .list-item.compact.active .list-dot{background:var(--accent)}
 .list-item.compact .list-date{font-size:12px;font-weight:400;color:var(--text-muted)}
 .list-item.compact.active .list-date{color:var(--accent);font-weight:500}
+
+/* ── Skills panel ── */
+.skills-panel{flex:1;overflow-y:auto;padding:10px}
+.skills-panel-title{
+  font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;
+  color:var(--text-dim);padding:4px 4px 10px
+}
+.skill-card{
+  background:var(--surface-2);border:1px solid var(--border);border-radius:8px;
+  padding:12px 12px 10px;margin-bottom:8px
+}
+.skill-name{
+  font-size:12px;font-weight:700;color:var(--accent);
+  font-family:'SF Mono','Fira Code','Fira Mono',monospace;margin-bottom:4px
+}
+.skill-desc{font-size:11px;color:var(--text-muted);line-height:1.5;margin-bottom:8px}
+.skill-triggers{display:flex;flex-wrap:wrap;gap:4px}
+.skill-trigger{
+  font-size:10px;background:var(--code-bg);border:1px solid var(--border);
+  color:var(--text-muted);padding:2px 6px;border-radius:4px;
+  font-family:'SF Mono','Fira Code','Fira Mono',monospace
+}
+.skills-link{
+  display:block;text-align:center;font-size:11px;color:var(--text-dim);
+  padding:10px;text-decoration:none;
+}
+.skills-link:hover{color:var(--accent)}
 
 /* ── Overlay (mobile) ── */
 .overlay{
@@ -252,6 +278,7 @@ body{
   <div class="view-toggle">
     <button class="vt-btn active" data-view="cal" onclick="setView('cal')">📅 캘린더</button>
     <button class="vt-btn" data-view="list" onclick="setView('list')">☰ 리스트</button>
+    <button class="vt-btn" data-view="skills" onclick="setView('skills')">⚡ 스킬</button>
   </div>
 
   <div id="cal-section">
@@ -264,6 +291,54 @@ body{
   </div>
 
   <div class="sidebar-list with-border" id="sidebar-list"></div>
+
+  <div id="skills-section" style="display:none;flex-direction:column;flex:1;overflow:hidden">
+    <div class="skills-panel">
+      <div class="skills-panel-title">공통 스킬</div>
+
+      <div class="skill-card">
+        <div class="skill-name">write-worklog</div>
+        <div class="skill-desc">오늘 세션 작업 내용을 worklog 형식으로 정리하고 GitHub에 push</div>
+        <div class="skill-triggers">
+          <span class="skill-trigger">워크로그 써줘</span>
+          <span class="skill-trigger">오늘 정리해줘</span>
+          <span class="skill-trigger">/write-worklog</span>
+        </div>
+      </div>
+
+      <div class="skill-card">
+        <div class="skill-name">bump-version</div>
+        <div class="skill-desc">socra-ai-workflow-guide 버전 올릴 때 4개 파일 동시 수정 (날짜 오타 방지)</div>
+        <div class="skill-triggers">
+          <span class="skill-trigger">버전 올려줘</span>
+          <span class="skill-trigger">배포할게</span>
+          <span class="skill-trigger">/bump-version</span>
+        </div>
+      </div>
+
+      <div class="skill-card">
+        <div class="skill-name">prep-meeting</div>
+        <div class="skill-desc">worklog 읽어서 이번 주 업무 요약 + 미팅 아젠다 자동 정리</div>
+        <div class="skill-triggers">
+          <span class="skill-trigger">미팅 준비해줘</span>
+          <span class="skill-trigger">이번주 요약해줘</span>
+          <span class="skill-trigger">/prep-meeting</span>
+        </div>
+      </div>
+
+      <div class="skill-card">
+        <div class="skill-name">record-trap</div>
+        <div class="skill-desc">실수·함정 발생 시 rules.md + agent-rules.md 동시 업데이트</div>
+        <div class="skill-triggers">
+          <span class="skill-trigger">이거 기억해줘</span>
+          <span class="skill-trigger">규칙 추가해줘</span>
+          <span class="skill-trigger">/record-trap</span>
+        </div>
+      </div>
+
+      <a class="skills-link" href="https://github.com/JumiJeong-design/jumi-worklog/tree/main/skills" target="_blank">GitHub에서 전체 보기 →</a>
+    </div>
+  </div>
 </aside>
 
 <div class="main">
@@ -672,7 +747,7 @@ ux 프린시플도 기본적인 룰을 넣거나 기획서기반 우선가치를
 ### 4. AI 에디터 연결 설정 섹션 추가
 
 **Claude Code 작업:**
-- `#editor-setup` 섹션 신규 추가: docs/ 폴더를 만든 후 실제로 AI 에디터에 연결하는 방법이 빠져 있던 문제 해결
+- `#editor-setup` 섹션 신규 추가
 - Claude Code(CLAUDE.md), Cursor(.cursor/rules), Windsurf(.windsurfrules), Copilot 도구별 진입점 파일 설정 방법과 공통 구조 예시 작성
 - 사이드바에 `🔗 에디터 연결` nav 항목 추가
 
@@ -695,8 +770,7 @@ ux 프린시플도 기본적인 룰을 넣거나 기획서기반 우선가치를
 ```
 
 **Claude Code 작업:**
-- `doc-comment` 컴포넌트 추가 — 페이지 내 검토 메모 표시용 (노란 배경 callout 스타일)
-- CSS 토큰 적용 (`--doc-comment-bg`, `--doc-comment-border`)
+- `doc-comment` 컴포넌트 추가 — 페이지 내 검토 메모 표시용
 
 ```
 아~ 너한테 말하라고? 난 다른 디자이너들이 보고 댓글달길 바란건데
@@ -710,15 +784,13 @@ ux 프린시플도 기본적인 룰을 넣거나 기획서기반 우선가치를
 
 ```
 이제 이런 내용들을 버전 별로 관리해서 업데이트하면 v0.2로 쌓고싶은데
-어떤 내용이 변경되거나 추가되었는지도 확인할수있는 화면이 있으면 좋을것같고
 ```
 
 **Claude Code 작업:**
-- `sidebar.html` 분리 — 3개 HTML 파일의 중복 버전 선택기를 단일 파일로 통합, JS fetch + 캐시 버스팅
+- `sidebar.html` 분리 — 3개 HTML 파일의 중복 버전 선택기를 단일 파일로 통합
 - 모바일 safe area 전면 대응: `viewport-fit=cover`, `env(safe-area-inset-*)`, `100dvh`
-- 모바일 topbar 높이 52→60px 조정, sidebar top/height 연동 수정
 - **v0.2 배포**: changelog 상세 기입, 버전 날짜 수정
-- **v0.3 배포**: 다크 모드, 제품 유형 자가진단 섹션, 5가지 확장 섹션(i18n/반응형/모션/브랜딩/다크) 추가
+- **v0.3 배포**: 다크 모드, 제품 유형 자가진단 섹션, 5가지 확장 섹션 추가
 
 ---
 
@@ -729,12 +801,9 @@ ux 프린시플도 기본적인 룰을 넣거나 기획서기반 우선가치를
 | `60dd2ab` | feat: v0.1 — AI Workflow 가이드 초기 배포 |
 | `c75c644` | refactor: 코드 정리 + changelog 추가 |
 | `ab70688` | feat: doc-comment 컴포넌트 추가 |
-| `817e75a` | fix: doc-comment 토큰 적용, 예시 코멘트 제거 |
 | `03fdda7` | fix: 디자인 리뷰 피드백 반영 — 4개 이슈 수정 |
 | `ac9d4be` | feat: AI 에디터 연결 설정 섹션 추가 |
 | `b0f2de2` | feat: 빠른 시작 섹션 + 환경 전제 callout 추가 |
-| `7878ac1` | fix: 모바일 safe area 및 dvh 전면 대응 |
-| `4f3a668` | fix: 모바일 사이드바 상단 topbar 겹침 수정 |
 | `89e1558` | v0.2 bump + 버전 선택기 Merge 충돌 해결 |
 | `0e5588f` | v0.3: 다크 모드 + 자가진단 + 5가지 확장 섹션 |
 | `810ecc4` | fix: 홈 카드 col-3 레이아웃 + extension 섹션 수정 |
@@ -749,19 +818,11 @@ ux 프린시플도 기본적인 룰을 넣거나 기획서기반 우선가치를
 
 ```
 screens/home.html 읽고 현재 디자인을 canvas에 반영해줘.
-colors_and_type.css의 CSS variables도 참고해줘.
 ```
 
 - Pencil MCP로 홈 포함 6개 화면 캔버스 반영 (모바일 390×844 기준)
-- 문제 발견: Pencil 내부 변수(`$--primary`, `$--accent`)가 SocraChat 팔레트 무시하고 자체 teal/blue로 렌더링
-
-```
-근데 figma도 mcp가 되는데 어떤차이지?
-난 제일불편한게 디자인적 탐색이 어렵다는거야 코드기반은 자유도가 너무 낮아
-```
-
-- Pencil vs Figma MCP 비교 정리 → 팀 협업·핸드오프·디자인 시스템 관리 목적이라면 Figma가 맞음
-- 워크플로우 구조 문제 인식: 이상 흐름 `탐색(Figma) → 확정 → 구현(HTML)` vs 현재 `구현(HTML) → 탐색 막힘`
+- 문제 발견: Pencil 내부 변수가 SocraChat 팔레트 무시하고 자체 teal/blue로 렌더링
+- Pencil vs Figma MCP 비교 정리 → 팀 협업·핸드오프 목적이라면 Figma가 맞음
 
 ---
 
@@ -769,17 +830,11 @@ colors_and_type.css의 CSS variables도 참고해줘.
 
 ```
 figma 토큰 내 계정인지 다시봐봐
-아니요 상은 계정말고 jumi.jeong@socra.ai로 하고싶네
 일단 codex, claude는 candoit.j@gmail.com, figma는 jumi.jeong@socra.ai 이걸로 하고싶어
 ```
 
 - Figma MCP가 `sangeun.park@socra.ai`로 연결된 것 확인 → `jumi.jeong@socra.ai`로 재연결
-- 최종 계정 설정 확정 및 메모리 저장
-
-| 서비스 | 계정 |
-|--------|------|
-| Claude Code / Codex | candoit.j@gmail.com |
-| Figma | jumi.jeong@socra.ai |
+- 최종 계정 설정 확정
 
 ---
 
@@ -787,27 +842,10 @@ figma 토큰 내 계정인지 다시봐봐
 
 ```
 클로드.md, devlog.md, design_system.md, readme.md 이거 다 무슨차이야?
-엉 123차례대로 해봐 그리고 블로그 사례글은 굳이안남겨도되지않나?
 ```
 
-- `docs/DESIGN-SC.md` (15섹션) + AI Agent Rules → `DESIGN_SYSTEM.md` 단일 통합
-- `docs/DESIGN-SC.md`, `docs/STYLE_DIRECTION.md` 삭제
+- `docs/DESIGN-SC.md` + AI Agent Rules → `DESIGN_SYSTEM.md` 단일 통합
 - `CLAUDE.md` 간소화 — 디자인 규칙 제거, `DESIGN_SYSTEM.md` 참조 방식으로
-- `canvas.html`, `design-canvas.jsx` → `preview/` 이동
-- `AI_CASE_STUDY.md` → `archive/` 이동
-- `screens/arena.html` 추가 (8번째 화면 초안)
-
----
-
-### Figma MCP OAuth 재인증 문제
-
-```
-오케이 이제 피그마에 지난번처럼 디자인 시안 몇개 그려볼래?
-```
-
-- SC/AP/NT 3방향 시안 작업 시도 → OAuth `Authentication Error: Invalid state parameter` 반복
-- 원인: 로컬 임시 서버가 응답 대기 중 닫혀버리는 구조적 버그
-- 2차 시도 성공 → Claude Code 재시작 후 MCP 재연결
 
 ---
 
@@ -815,21 +853,18 @@ figma 토큰 내 계정인지 다시봐봐
 
 ```
 이번주~지난주 내가 무슨 업무했는지 요약해봐
-근데 이따 기획-프론트 개발자랑 프로세스 논의를 해야하는데 어떤 내용 위주로 얘기하는게 나을지
-내 고민은 디자이너가 스타일 고민을 해야하는 프로세스야
+근데 이따 기획-프론트 개발자랑 프로세스 논의를 해야하는데
 ```
 
 - 5/21~5/22 작업 요약 + 미팅 자료 정리
-- 미팅 핵심 아젠다 선별: 컴포넌트 시스템, i18n 배포 게이트, CSS 토큰 3계층, Figma Variables 싱크 플로우
-- 현재 "구현 중심" 구조에서 탐색 단계가 없어진 문제 확인
+- 미팅 핵심 아젠다 선별: 컴포넌트 시스템, i18n 배포 게이트, CSS 토큰 3계층
 - 해결 방향: `탐색(Figma 스케치) → 방향 확정 → AI 구현` 순서 재정비 필요
 
 ---
 
 ### Notion 동기화 스크립트 버그 수정
 
-- 인자 없이 `sync-devlog-to-notion.mjs` 실행 시 전체 파일 중복 처리 문제
-- 오늘 날짜 파일만 처리하도록 기본값 수정
+- 인자 없이 실행 시 전체 파일 중복 처리 문제 → 오늘 날짜 파일만 처리하도록 기본값 수정
 
 ---
 
@@ -881,24 +916,12 @@ figma 토큰 내 계정인지 다시봐봐
 
 - Primitives(25개) → Theme(36개) → Spacing+Radii(16개) 완성
 - CSS ↔ Figma Variables 완전 정렬 확인
-- "피그마 싱크해줘" 커맨드: Plugin API로 Variables 읽어 CSS 업데이트 확정
-
----
-
-### Figma HTML/CSS 기반 편집 가능 화면 싱크 (Codex)
-
-> html 원본으로 하든 html css 파일 읽어서 반영하든 해라
-
-- 새 페이지 `HTML Sync - Component Synced KR` 생성
-- 8개 화면 × 3 variant (Web 1440 Light/Dark, Mobile 380 Light) 반영
-- 기존 Figma 컴포넌트 인스턴스 사용 원칙 확정
 
 ---
 
 ### i18n 자동 검사 + 배포 게이트
 
 - `scripts/check-i18n.js` — 누락 키 있으면 Vercel 빌드 차단 (exit 1)
-- QA 피드백 반영: 타이포그래피 토큰 개선, greeting 카피 변경
 
 ---
 
@@ -907,14 +930,8 @@ figma 토큰 내 계정인지 다시봐봐
 | 커밋 | 설명 |
 |------|------|
 | `24dbdf8` | refactor: eliminate all hardcoded values; add a11y WCAG 2.1 AA pass |
-| `f5ae9fe` | feat: translate pre-filled composer textarea on language switch |
 | `bbde767` | feat: automated i18n coverage checker + deploy gate |
 | `9208220` | fix: vercel.json — set outputDirectory to root for static site |
-| `4dcb5b8` | chore: remove MONO theme, rename DESIGN.md to DESIGN-AP.md |
-| `fad503f` | fix: add brand AI variable aliases |
-| `ef6d223` | refactor: model icon avatars follow theme color |
-| `e50a09d` | fix: restore brand AI vars for charts/bars/persona avatars |
-| `df262a6` | fix: add missing components.css link to home.html |
 </script>
 
 <script type="text/plain" id="entry-2026-05-21">
@@ -942,17 +959,6 @@ figma 토큰 내 계정인지 다시봐봐
 - Figma Personal Access Token 발급 + MCP 설정 완료
 - 7개 화면 각각 Figma 캡처 → 파일 `HFRVQXoWTWVaxMDNW7yapS`에 전송
 - Figma Variables 65개 생성 (Theme 49개, Spacing 9개, Radius 7개, light/dark 2모드)
-- 컴포넌트 variants: Button 12개, AI Avatar 18개, Chat Bubble, Composer 등
-
----
-
-### Apple HIG 테마 + SC/AP 토글
-
-> 전체적으로 스타일을 바꾸는 것을 테스트해보고싶다면?
-
-- `apple-theme.css` 신규 생성 (SF Pro, Apple Blue, Apple Fog 배경)
-- Tweaks 패널 제거 (디자이너 관점에서 효용 낮음) → SC/AP 토글로 단순화
-- 통합 플로팅 툴바: 언어/다크모드/반응형/테마 한 곳에, 드래그 가능
 
 ---
 
@@ -961,7 +967,7 @@ figma 토큰 내 계정인지 다시봐봐
 > 앞으로 수정 후 해야할 일 리스트업 해봐
 
 - `/ship` 커맨드 등록: i18n 검사 → 커밋 → 배포 → 브라우저 확인
-- `CLAUDE.md` i18n 규칙 등록 (아포스트로피 → 큰따옴표, TEXTAREA textContent 방식)
+- `CLAUDE.md` i18n 규칙 등록
 
 ---
 
@@ -971,7 +977,6 @@ figma 토큰 내 계정인지 다시봐봐
 |------|------|
 | `797629f` | Initial commit: SocraChat prototype with Apple theme override |
 | `a53593e` | feat: Apple HIG theme + Figma component library |
-| `80095cc` | Add SC/AP design theme toggle to toolbar, remove tweaks panel |
 | `97ba429` | feat: unified toolbar, full i18n coverage, AP palette tokens |
 | `1565d2f` | chore: add /ship command and post-change checklist to CLAUDE.md |
 </script>
@@ -1062,16 +1067,28 @@ function buildCalendar() {
 function setView(mode) {
   viewMode = mode;
   document.querySelectorAll('.vt-btn').forEach(b => b.classList.toggle('active', b.dataset.view === mode));
+
   const calSection = document.getElementById('cal-section');
   const list = document.getElementById('sidebar-list');
-  if (mode === 'cal') {
+  const skillsSection = document.getElementById('skills-section');
+
+  if (mode === 'skills') {
+    calSection.style.display = 'none';
+    list.style.display = 'none';
+    skillsSection.style.display = 'flex';
+  } else if (mode === 'cal') {
     calSection.style.display = '';
+    list.style.display = '';
     list.classList.add('with-border');
+    skillsSection.style.display = 'none';
+    buildList();
   } else {
     calSection.style.display = 'none';
+    list.style.display = '';
     list.classList.remove('with-border');
+    skillsSection.style.display = 'none';
+    buildList();
   }
-  buildList();
 }
 
 function buildList() {
