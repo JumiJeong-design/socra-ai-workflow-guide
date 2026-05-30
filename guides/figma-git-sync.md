@@ -2,45 +2,68 @@
 
 ## Purpose
 
-`Socra Design system test`와 `socra-ai-product-design`가 서로 다른 기준을 말하지 않도록, Figma의 시각적 기준과 Git의 텍스트/버전 기준을 연결한다.
+`Socra Design system test`, `socra-ai-product-design`, code implementation, and Storybook이 서로 다른 기준을 말하지 않도록 sync 경계를 정의한다.
+
+이 문서는 Figma 전체를 Git으로 옮기기 위한 문서가 아니다. Figma의 탐색성은 보호하고, approved `Components`와 approved `Screens`만 Git spec과 Storybook 검증 대상으로 삼는다.
 
 ## Source of Truth
 
-| Area | Primary Source | Mirror |
+| Area | Primary Source | Verification / Mirror |
 | --- | --- | --- |
-| Visual component shape | Figma | Git component spec |
-| Token names and values | Git token files | Figma variables |
-| Variant/state inventory | Figma component set | Git component spec |
+| Design exploration | Figma Exploration / Candidates | Worklog notes when useful |
+| Approved visual component shape | Figma Components | Git component spec |
+| Approved design contract | Git spec | Storybook and code review |
+| Implementation behavior | Code | Storybook |
+| Implemented UI review | Storybook | Figma/Git comparison |
 | Design decisions | Git ADR | Figma annotations when useful |
+
+## Figma Zones
+
+| Zone | Sync Rule |
+| --- | --- |
+| Exploration | Do not sync to Git/Storybook |
+| Candidates | Capture context only; not an implementation contract |
+| Components | Sync when approved |
+| Screens | Sync only when marked approved |
+| Archive | Do not sync unless referenced as rationale |
 
 ## Sync Rule
 
-- Figma component name과 Git 문서 slug는 1:1로 맞춘다.
+- Figma component name과 Git 문서 slug는 approved sync target에만 1:1로 맞춘다.
 - Figma node id는 Git component spec의 `Figma Node` 섹션에 기록한다.
-- Git에서 스펙이 바뀌면 Figma 반영 여부를 sync checklist로 확인한다.
-- Figma에서 시각적 변경이 생기면 sync log에 먼저 기록한 뒤 Git 스펙과 토큰에 반영한다.
+- Git spec은 approved design contract다.
+- Storybook은 구현된 컴포넌트가 Git spec과 Figma approved state를 따르는지 확인하는 review surface다.
+- Code Connect는 optional bridge이며, 권한이나 코드 경로가 없다고 sync 운영을 멈추지 않는다.
 
-## First Components
+## Sync Flow
 
-| Figma Component | Git Spec | Status |
-| --- | --- | --- |
-| Button | `socra-ai-product-design/design-system/components/button.md` | Initial sync target |
-| Chat Input Bar | `socra-ai-product-design/design-system/components/chat-input-bar.md` | Initial sync target |
-| Message Bubble | `socra-ai-product-design/design-system/components/message-bubble.md` | Initial sync target |
+```text
+Figma Exploration
+-> Figma Candidates
+-> Approved Component / Screen
+-> Git spec
+-> Code implementation
+-> Storybook review
+-> Verified sync
+```
 
-## Semi-Automated Sync Loop
+## AI Checklist
 
-1. Designer updates Figma or Git spec.
-2. AI reads changed side and drafts diff/checklist.
-3. Designer approves visual/product judgment.
-4. AI updates mirrored docs or checklist.
-5. PR links Figma node, sync log entry, and affected component specs.
+Before updating Git spec, AI must answer:
+
+- Is this Figma work exploration, candidate, approved component, approved screen, or archive?
+- Is this a sync target?
+- Does it need a Git spec update, or only worklog/context capture?
+- Is there a Storybook story or should the story status remain `pending`?
+- Is Code Connect relevant now, or optional later?
 
 ## Acceptance Criteria
 
-- Every component PR links a Figma node or explains why none exists.
-- Every component spec change includes a sync checklist update.
-- Every Figma-originated change has a sync log entry before spec updates.
+- Every sync-target component links a Figma node or explains why none exists.
+- Every approved component has a Git spec.
+- Every implemented component has or plans a Storybook story.
+- Exploration and candidate work are not forced into implementation contracts.
+- PRs explain whether the change affects Figma, Git spec, code, Storybook, or only exploration context.
 
 ## Source Worklog
 
