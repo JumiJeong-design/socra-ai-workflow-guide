@@ -130,7 +130,10 @@
           <strong style="font-size:15px;">vectorPaths — 오픈소스 SVG 경로 직접 주입 불가</strong>
         </div>
         <div style="padding:20px;">
-          <p style="font-size:14px; color:var(--text-secondary); margin-bottom:16px; line-height:1.7;">Figma Plugin API의 <code>vectorPaths</code>는 MCP 환경에서 SVG 경로 커맨드의 일부를 지원하지 않는다. Simple Icons, LobeHub 등에서 가져온 실제 브랜드 SVG 경로를 코드로 직접 주입하면 파싱 오류가 발생한다.</p>
+          <div style="background:var(--red-dim); border:1px solid var(--red-border); border-radius:var(--radius-sm); padding:14px; margin-bottom:16px;">
+            <div style="font-size:11px; font-weight:700; color:var(--red); letter-spacing:0.06em; text-transform:uppercase; margin-bottom:8px;">❌ 일어난 일</div>
+            <p style="font-size:14px; color:var(--text-secondary); margin:0; line-height:1.7;">Simple Icons, LobeHub 등에서 가져온 브랜드 SVG 경로를 <code>vectorPaths</code>로 코드 주입 시도 → 파싱 오류 발생.</p>
+          </div>
 
           <div style="font-size:12px; color:var(--text-muted); margin-bottom:12px; padding:8px 12px; background:var(--bg-code); border-radius:var(--radius-sm); border-left:2px solid var(--border);">이 목록은 Figma 공식 문서에 명시된 것이 아니라 실제 작업 중 파싱 오류로 확인한 한계입니다 (2026-05-29 기준). MCP 버전 업데이트에 따라 달라질 수 있으므로 오류 발생 시 최신 동작을 직접 확인하세요.</div>
 
@@ -163,10 +166,13 @@
           <strong style="font-size:15px;">createNodeFromSvgAsync — MCP 환경에서 미지원</strong>
         </div>
         <div style="padding:20px;">
-          <p style="font-size:14px; color:var(--text-secondary); margin-bottom:16px; line-height:1.7;">Figma Plugin API 공식 문서에는 <code>figma.createNodeFromSvgAsync(svg)</code>가 존재하지만, MCP(Claude Code) 환경에서는 이 메서드가 없다.</p>
-          <div style="background:var(--bg-code-block); border-radius:var(--radius-sm); padding:14px; font-family:monospace; font-size:13px; color:var(--text-secondary);">
-            <span style="color:var(--red);">// TypeError: figma.createNodeFromSvgAsync: no such property</span><br>
-            <span style="color:var(--text-muted);">const node = await figma.createNodeFromSvgAsync(svgString);</span>
+          <div style="background:var(--red-dim); border:1px solid var(--red-border); border-radius:var(--radius-sm); padding:14px; margin-bottom:16px;">
+            <div style="font-size:11px; font-weight:700; color:var(--red); letter-spacing:0.06em; text-transform:uppercase; margin-bottom:8px;">❌ 일어난 일</div>
+            <p style="font-size:14px; color:var(--text-secondary); margin:0 0 12px; line-height:1.7;">공식 API 문서에 <code>figma.createNodeFromSvgAsync(svg)</code>가 있어 코드 작성 → MCP 환경에서는 이 메서드 자체가 없어 TypeError 발생.</p>
+            <div style="background:var(--bg-code-block); border-radius:var(--radius-sm); padding:12px; font-family:monospace; font-size:13px; color:var(--text-secondary);">
+              <span style="color:var(--red);">// TypeError: figma.createNodeFromSvgAsync: no such property</span><br>
+              <span style="color:var(--text-muted);">const node = await figma.createNodeFromSvgAsync(svgString);</span>
+            </div>
           </div>
           <div style="background:var(--green-bg); border:1px solid var(--green-border); border-radius:var(--radius-sm); padding:14px; margin-top:12px;">
             <div style="font-size:11px; font-weight:700; color:var(--green); letter-spacing:0.06em; text-transform:uppercase; margin-bottom:6px;">✅ 대안</div>
@@ -182,7 +188,10 @@
           <strong style="font-size:15px;">combineAsVariants — 자동 배치 안 됨, 위치 직접 설정 필요</strong>
         </div>
         <div style="padding:20px;">
-          <p style="font-size:14px; color:var(--text-secondary); margin-bottom:16px; line-height:1.7;"><code>figma.combineAsVariants(components, page)</code>를 호출하면 모든 variant가 좌표 (0, 0)에 겹쳐진다. combine 전에 각 컴포넌트 위치를 지정해도 무시된다.</p>
+          <div style="background:var(--red-dim); border:1px solid var(--red-border); border-radius:var(--radius-sm); padding:14px; margin-bottom:16px;">
+            <div style="font-size:11px; font-weight:700; color:var(--red); letter-spacing:0.06em; text-transform:uppercase; margin-bottom:8px;">❌ 일어난 일</div>
+            <p style="font-size:14px; color:var(--text-secondary); margin:0; line-height:1.7;"><code>figma.combineAsVariants()</code> 호출 전 각 컴포넌트에 위치를 지정했지만 무시되고, 모든 variant가 좌표 (0, 0)에 겹쳐진 채로 생성됨.</p>
+          </div>
 
           <div style="background:var(--bg-code-block); border-radius:var(--radius-sm); padding:14px; font-family:monospace; font-size:13px; color:var(--text-secondary); margin-bottom:12px; line-height:1.8;">
             <span style="color:var(--text-muted);">// ❌ combine 전 위치 지정 → 무시됨</span><br>
@@ -254,7 +263,10 @@
           <strong style="font-size:15px;">작업 페이지를 지정하지 않아 첫 번째 페이지만 바라보는 실수</strong>
         </div>
         <div style="padding:20px;">
-          <p style="font-size:14px; color:var(--text-secondary); margin-bottom:16px; line-height:1.7;">Figma 파일에 여러 페이지가 있을 때, 에이전트가 기본 페이지나 첫 번째 페이지 기준으로 노드를 찾는 경우가 있다. 사용자가 특정 페이지 링크를 주었더라도 코드 실행 시 페이지 컨텍스트를 명시하지 않으면 엉뚱한 페이지에서 작업할 수 있다.</p>
+          <div style="background:var(--red-dim); border:1px solid var(--red-border); border-radius:var(--radius-sm); padding:14px; margin-bottom:16px;">
+            <div style="font-size:11px; font-weight:700; color:var(--red); letter-spacing:0.06em; text-transform:uppercase; margin-bottom:8px;">❌ 일어난 일</div>
+            <p style="font-size:14px; color:var(--text-secondary); margin:0; line-height:1.7;">특정 페이지 링크를 전달했음에도 코드 실행 시 페이지 컨텍스트를 명시하지 않아, 에이전트가 첫 번째 페이지를 기준으로 작업 → 엉뚱한 페이지에 변경 발생.</p>
+          </div>
           <div style="background:var(--green-bg); border:1px solid var(--green-border); border-radius:var(--radius-sm); padding:14px;">
             <div style="font-size:11px; font-weight:700; color:var(--green); letter-spacing:0.06em; text-transform:uppercase; margin-bottom:8px;">✅ 대안</div>
             <p style="font-size:14px; color:var(--text-secondary); margin:0; line-height:1.7;">작업 시작 시 전달받은 node-id가 속한 page를 확인하고, 필요한 경우 <code>await figma.setCurrentPageAsync(page)</code>를 먼저 실행한다. 페이지 이동이 필요한 스크립트에는 이 처리를 공통 유틸처럼 넣는다.</p>
@@ -284,7 +296,10 @@
           <strong style="font-size:15px;">Variables를 못 읽는다고 결론내리는 실수</strong>
         </div>
         <div style="padding:20px;">
-          <p style="font-size:14px; color:var(--text-secondary); margin-bottom:16px; line-height:1.7;">연결 방식이나 권한, 변수 구조에 따라 AI가 Variables를 충분히 읽지 못하는 것처럼 보일 수 있다. 하지만 MCP가 올바르게 연결되어 있고 필요한 권한이 있으면 컬렉션, 모드, 오타, semantic token 부족 같은 구조 문제까지 감사할 수 있다.</p>
+          <div style="background:var(--red-dim); border:1px solid var(--red-border); border-radius:var(--radius-sm); padding:14px; margin-bottom:16px;">
+            <div style="font-size:11px; font-weight:700; color:var(--red); letter-spacing:0.06em; text-transform:uppercase; margin-bottom:8px;">❌ 일어난 일</div>
+            <p style="font-size:14px; color:var(--text-secondary); margin:0; line-height:1.7;">Variables가 제대로 안 읽히는 상황에서 연결·권한·컬렉션 구조를 확인하지 않고 "AI가 Variables를 못 읽는다"고 바로 결론 → 실제로는 구조·권한 문제였음.</p>
+          </div>
           <div style="background:var(--green-bg); border:1px solid var(--green-border); border-radius:var(--radius-sm); padding:14px;">
             <div style="font-size:11px; font-weight:700; color:var(--green); letter-spacing:0.06em; text-transform:uppercase; margin-bottom:8px;">✅ 대안</div>
             <p style="font-size:14px; color:var(--text-secondary); margin:0; line-height:1.7;">“Variables 못 읽음”으로 기록하지 말고, 연결 방식과 권한을 먼저 확인한다. Semantic 컬렉션에는 bg, text, border, icon, status처럼 목적 기반 토큰을 충분히 만들고, mode 이름은 <code>light</code>/<code>dark</code>처럼 명확하게 둔다.</p>

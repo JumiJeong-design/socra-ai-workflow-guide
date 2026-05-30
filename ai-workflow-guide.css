@@ -1035,6 +1035,34 @@ ol.styled li::before {
 
 .table-scroll .doc-table { margin: 0; }
 
+/* ─── Step nav footer ─── */
+.step-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 32px;
+  padding-top: 16px;
+  border-top: 1px dashed var(--border-light);
+  font-size: 13px;
+}
+.step-footer a {
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.step-footer a:hover { color: var(--accent); }
+.step-footer a.next { color: var(--accent); font-weight: 600; margin-left: auto; }
+
+/* ─── Step prerequisite note ─── */
+.step-prereq {
+  font-size: 12px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 2px 0 20px;
+}
+
 /* ─── Footer ─── */
 .footer {
   border-top: 1px solid var(--border);
