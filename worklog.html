@@ -428,6 +428,125 @@ body{
   <div id="entry-area"></div>
 </div>
 
+<script type="text/plain" id="entry-2026-05-30">
+# 2026-05-30
+
+## 미해결 항목
+
+- [ ] Figma 디자인 전체 리디자인 (주미님 직접) → 완료 후 코드 sync
+- [ ] 코드 기반 컴포넌트 라이브러리 기술 스택 확정 → 확정 후 Code Connect
+- [ ] FIGMA_TOKEN 등록 완료 + 네트워크 정책 `api.figma.com` 추가 → **새 세션에서 REST API 전환 테스트 필요**
+- [ ] 브랜드 컬러 확정 (리디자인 전제조건)
+- [ ] Latin + JP 폰트 확정 (Noto Sans JP 재검토 필요)
+- [ ] Foundation에 Error states · Motion · Breakpoints 추가
+
+---
+
+## 함정 모음
+
+- **Figma MCP Plugin API lazy loading** — `get_metadata`가 5페이지 중 Figma 데스크탑 앱 메모리에 로드된 2개(Components + Icons)만 반환. Plugin API 구조적 한계. 해결책: REST API(`api.figma.com/v1/files/:key`) — 서버에서 파일 전체를 읽어 페이지 수 제한 없음.
+- **CCR 네트워크 정책 설정 위치** — Claude Code 앱 설정(코드 표시/테마)이나 사용자 지정(스킬/커넥터) 페이지가 아님. 올바른 경로: 세션 목록 → cloud icon → Environment gear → Network 탭 → Custom → 도메인 추가. 변경은 새 세션에 적용.
+- **ops-plan 전술 vs 전략 혼동** — v1 초안이 도구 자동화 수준에 머물렀음. 글로벌 서비스 계획에는 검증 루프, Japan-First 설계 원칙, 품질 게이트, 팀 스케일 전환 시나리오가 반드시 포함되어야 함.
+
+---
+
+## 회고 및 인사이트
+
+### AI 도구 활용
+
+- **컨텍스트 자동화는 협업 퀄리티를 바꾼다** — CONTEXT.md가 SessionStart에 자동 로드되면, 새 세션도 이전 결정 맥락을 즉시 파악. "왜 이렇게 결정했나"가 없으면 매번 재설명 비용 발생.
+- **MCP 도구의 한계를 알아야 우회책이 보인다** — 문제 추적 순서: "왜 2개만?" → Plugin API 특성 → REST API 필요 → FIGMA_TOKEN → 네트워크 정책. 한계를 모르면 "Figma 구조가 잘못된 것"으로 오인.
+
+### 설계 결정
+
+- **검증 루프 없는 빌드 트랙은 반쪽** — PMF는 빌드만으로 못 찾음. Build track + Learn track 동시 운영 필수.
+- **Japan-First는 로컬라이제이션이 아니라 설계 기준** — 일본을 나중에 조정하는 대상이 아닌 초기 설계의 기준으로 삼아야 현지화 비용 최소화.
+- **토큰 네이밍은 디자인-코드 간 계약** — `color-text-secondary` 같은 semantic 이름만 유효. 3레이어: Primitive → Semantic → Component.
+
+---
+
+## 2026-05-30
+
+### 1. jumi-worklog 레포 자동화 완성
+
+**Claude Code 작업:**
+- `CONTEXT.md` 신규 생성 — 세션 시작 시 자동 로드용 현재 상태 스냅샷
+- `AGENTS.md` 업데이트 — AI 도구별 진입점 테이블 추가
+- `write-worklog/SKILL.md` 업데이트 — Step 4.5 CONTEXT.md 자동 갱신 추가
+
+---
+
+### 2. Figma 5페이지 구조 확인 + MCP lazy loading 조사
+
+```
+Figma Foundation 페이지는 이미 있는데? 다시봐봐
+이상하네 레퍼런스 이미지들도 있는데? 총 페이지 5개야
+MCP의 get_metadata 도구가 5개 중 2개만 반환하는 버그는 왜?
+```
+
+**Claude Code 작업:**
+- Figma 5페이지 구조 확인: Components / Foundation / Icons / Pages / Image reference
+- Plugin API lazy loading 원인 분석 (데스크탑 앱 메모리에 로드된 페이지만 반환하는 구조적 한계)
+- REST API(`api.figma.com/v1/files/:key`)가 전체 페이지 반환함을 확인
+- `docs/agent-rules.md` / `CONTEXT.md` Figma 5페이지 구조 반영
+
+---
+
+### 3. Figma REST API 전환 준비 — FIGMA_TOKEN 설정
+
+**Claude Code 작업:**
+- Figma PAT를 `~/.figma_token`에 저장 (chmod 600, git 커밋 금지)
+- CCR 네트워크 정책에 `api.figma.com` 추가 안내 → 주미님 직접 적용 완료
+- 새 세션에서 REST API 전환 테스트 예정
+
+---
+
+### 4. ops-plan.md 전면 재작성 — 글로벌 서비스 아키텍처
+
+```
+최선이야? 글로벌 서비스를 만들어야해
+전면 재작성해
+```
+
+**Claude Code 작업:**
+- v1(도구 자동화 중심) → v2(글로벌 서비스 아키텍처) 전면 재작성
+- 추가 핵심 섹션: 두 개의 트랙(Build+Learn), Japan-First 설계 원칙, 제품 검증 루프, 품질 게이트, 토큰 계약(3레이어), 팀 스케일 전환 시나리오
+
+---
+
+### 5. 문서 4종 병렬 업데이트
+
+**Claude Code 작업:**
+- `docs/product-context.md` — 검증 가설 테이블(4개, 모두 🔄 검증 전) + 화면 맵 추가
+- `design-system/decisions.md` — 서술형 → 구조화 테이블 재포맷 (날짜/주제/배경/결정/대안/결과)
+- `docs/model-registry.md` — 신규 생성: 5개 활성 모델 현황, 교체 체크리스트, 특성 비교
+- `CONTEXT.md` (jumi-worklog) — 검증 가설, 결정 이유, 모델 현황, Figma 5페이지 전면 업데이트
+
+---
+
+## 커밋 (jumi-worklog)
+
+| 커밋 | 설명 |
+|------|------|
+| `c84dc2a` | feat: CONTEXT.md 추가 |
+| `452754d` | feat: write-worklog 스킬 Step 4.5 추가 |
+| `11dc466` | docs: ops-plan 전면 재작성 — 글로벌 서비스 아키텍처 |
+| `744fc3a` | context: major update — 검증 가설, 결정 이유, 모델 현황 |
+| `46b4274` | feat: 2026-05-30 worklog 추가 |
+
+---
+
+## 커밋 (socra-ai-product-design)
+
+| 커밋 | 설명 |
+|------|------|
+| `c31916d` | docs: components.md 35개 전면 싱크 |
+| `9582750` | docs: agent-rules.md Figma 5페이지 구조 업데이트 |
+| `4b05eb9` | docs: product-context 검증 가설 + 화면 맵 추가 |
+| `fd6fc1b` | docs: decisions.md 구조화 테이블 포맷 |
+| `64751b3` | docs: model-registry.md 신규 생성 |
+</script>
+
 <script type="text/plain" id="entry-2026-05-29">
 # 2026-05-29
 
@@ -676,6 +795,7 @@ body{
 marked.use({ gfm: true, breaks: false });
 
 const ENTRIES = [
+  { date: '2026-05-30', dayKo: '토요일', tags: ['ops-plan', 'figma', 'socra-ai-product', 'jumi-worklog'] },
   { date: '2026-05-29', dayKo: '금요일', tags: ['figma', 'socra-ai-product', 'worklog-viewer'] },
   { date: '2026-05-28', dayKo: '목요일', tags: ['socra-ai-product', 'figma', 'jumi-worklog'] },
   { date: '2026-05-27', dayKo: '수요일', tags: ['workflow-guide'] },
