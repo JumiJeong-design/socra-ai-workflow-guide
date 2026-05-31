@@ -428,6 +428,89 @@ body{
   <div id="entry-area"></div>
 </div>
 
+<script type="text/plain" id="entry-2026-05-31">
+# 2026-05-31
+
+## 미해결 항목
+
+- [ ] Figma 디자인 전체 리디자인 (주미님 직접) → 완료 후 코드 sync
+- [ ] 코드 기반 컴포넌트 라이브러리 기술 스택 확정 → 확정 후 Code Connect
+- [ ] FIGMA_TOKEN 등록 + 네트워크 정책 `api.figma.com` 추가 완료 → 새 세션에서 REST API 전환 테스트 필요
+- [ ] 브랜드 컬러 확정 (리디자인 전제조건)
+- [ ] 일본어 폰트 확정 — M PLUS 2 vs Pretendard JP (Figma 렌더링 비교)
+- [ ] PR #3 머지 — Rule 18 추가 브랜치, CI 통과 후 판단
+
+---
+
+## 함정 모음
+
+- **워크로그 계층 split-brain** — 표준은 `logs/YYYY/MM/`인데 write-worklog Step 4가 루트에 저장 중이었음. 결과 6일치가 루트에 쌓이고, CI(`find logs`)가 루트 파일을 통째로 우회. 해결: 루트 6개 → `logs/2026/05/`로 이전 + 5/29 복원 + 루트 삭제 + 스킬/AGENTS 경로 수정.
+- **워크플로우 가이드 5/30 작업이 5/30 워크로그에 누락** — Codex가 만든 가이드 체계 커밋이 5/30 기록에 빠져 있었음. 오늘 함께 반영해 보존.
+
+---
+
+## 회고 및 인사이트
+
+### AI 도구 활용
+
+- **스킬이 쓰는 경로와 CI가 검증하는 경로가 다르면 조용히 깨진다** — 자동화 스킬은 "쓰는 위치 = 검증 위치"를 항상 일치시켜야 한다.
+- **두 에이전트가 같은 레포를 만지면 기록이 갈린다** — CONTEXT.md를 단일 진실원으로 유지하는 게 중요.
+
+### 설계 결정
+
+- **Figma-first → Storybook 검증 모델 채택** — 구현 전 Figma 추출 필수, 임의 스타일링 금지.
+- **모든 컴포넌트·프레임은 Auto Layout (Rule 18)** — 다국어 텍스트 길이 변화에 레이아웃이 깨지지 않게.
+
+---
+
+## 2026-05-31
+
+### 1. 워크플로우 가이드 체계 구축 (Codex)
+
+- 4채널 운영 모델 정의 (jumi-worklog / product-design / workflow-guide / Figma)
+- 가이드 신규: Figma Git sync, Screen·Component 플레이북, AI design review, Daily worklog
+- GitHub 인프라: 가이드 검증 CI, PR·이슈 템플릿 3종, 추천 라벨
+- 첫 sync 타깃: Button, Chat Input Bar, Message Bubble + Text Field, Answer Card
+
+### 2. 워크플로우 가이드 — Figma-first 규칙 강화
+
+- 컴포넌트 구현 전 Figma 추출 필수화
+- Figma Git sync 가이드에 임의 스타일링 금지 규칙 추가
+
+### 3. socra-ai-product-design — Rule 18 Auto Layout (PR #3)
+
+- rules.md에 Rule 18 "모든 컴포넌트와 프레임은 Auto Layout으로" 추가
+- PR 브랜치 6규칙 → main 17규칙 최신화 + Rule 18
+
+### 4. jumi-worklog 계층 마이그레이션
+
+- 루트 워크로그 6개 → `logs/2026/05/` 이전, 5/29 복원, 루트 삭제
+- write-worklog 스킬 + AGENTS.md 경로를 `logs/YYYY/MM/`로 수정
+
+---
+
+## 커밋 (jumi-worklog)
+
+| 커밋 | 설명 |
+|------|------|
+| `8f0e5df` | chore: worklog 계층 마이그레이션 + 5/29 복원 |
+| `ceab134` | fix: write-worklog 경로 logs/YYYY/MM/ 수정 |
+
+## 커밋 (socra-ai-workflow-guide)
+
+| 커밋 | 설명 |
+|------|------|
+| `a8859fa` | Require Figma extraction before component implementation |
+| `0eb9b26` | Add no arbitrary styling rule to Figma Git sync guide |
+| `8ac9a5a` | Add workflow guide validation workflow (CI) |
+
+## 커밋 (socra-ai-product-design)
+
+| 커밋 | 설명 |
+|------|------|
+| `1726b16` | feat: rules.md Rule 18 Auto Layout (PR #3, main 미머지) |
+</script>
+
 <script type="text/plain" id="entry-2026-05-30">
 # 2026-05-30
 
@@ -843,6 +926,7 @@ MCP의 get_metadata 도구가 5개 중 2개만 반환하는 버그는 왜?
 marked.use({ gfm: true, breaks: false });
 
 const ENTRIES = [
+  { date: '2026-05-31', dayKo: '일요일', tags: ['워크플로우-가이드', 'rule-18', 'worklog-마이그레이션', 'figma-first'] },
   { date: '2026-05-30', dayKo: '토요일', tags: ['rules-복구', 'figma', 'socra-ai-product', 'jumi-worklog'] },
   { date: '2026-05-29', dayKo: '금요일', tags: ['figma', 'socra-ai-product', 'worklog-viewer'] },
   { date: '2026-05-28', dayKo: '목요일', tags: ['socra-ai-product', 'figma', 'jumi-worklog'] },
